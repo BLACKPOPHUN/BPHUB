@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlackpopHub</title>
+<style>
+body { font-family: sans-serif; background: #121212; color: white; padding: 20px; margin:0; }
+h2 { text-align: center; font-size: 28px; margin-bottom: 20px; }
+input, button, textarea { border-radius: 6px; border:none; outline:none; }
+input { width: calc(100% - 16px); padding: 8px; margin: 5px 0; }
+button { padding:10px 15px; margin:5px 0; background:#ff003c; color:white; cursor:pointer; transition:0.3s; }
+button:hover { background:#2563eb; }
+a { color: #00f; cursor:pointer; display:block; text-align:center; margin-top:5px; }
+.box { background:#1e1e1e; padding:15px; margin:0 auto 20px auto; width:90%; max-width:700px; border-radius:12px; box-shadow:0 0 10px #00000050; }
+textarea { width:100%; height:100px; padding:10px; resize:none; background:#111; color:#eee; font-size:14px; }
+textarea[readonly]{background:#222;}
+.msg { color: #8bf48a; display:none; margin-top:8px; text-align:center; }
+#logout { position:fixed; left:10px; bottom:10px; padding:15px 20px; background:#ff6600; font-size:16px; border-radius:8px; cursor:pointer; display:none; transition:0.3s; }
+#logout:hover { background:#ff3300; transform: scale(1.05);}
+#username-btn{position:fixed;right:10px;top:10px;background:#2563eb;padding:10px 15px;border-radius:8px;cursor:pointer;display:none;}
+#user-time-box{position:fixed;right:10px;top:50px;background:#333;padding:10px;border-radius:8px;display:none;max-width:200px;word-break:break-word;}
+.edit-btn{background:#ff9800;margin-left:10px;}
+.edit-btn:hover{background:#f57c00;}
+.save-btn{background:#4caf50;}
+.save-btn:hover{background:#45a049;}
+.cancel-btn{background:#666;}
+.cancel-btn:hover{background:#555;}
+.editing-indicator{color:#ff9800;font-size:12px;margin-top:5px;display:none;}
+@media(max-width:480px){
+    h2{font-size:24px;}
+    #logout, #username-btn{padding:10px 12px;font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login-container" class="box">
+    <h2>Login</h2>
+    <input type="text" id="login-username" placeholder="Username"><br>
+    <input type="password" id="login-password" placeholder="Password"><br>
+    <button onclick="login()">เข้าสู่ระบบ</button>
+    <a onclick="showRegister()">หารหัส</a>
+    <p id="login-msg" style="color:red;"></p>
+</div>
+
+<!-- Register / หาโค้ด -->
+<div id="register-container" class="box" style="display:none;">
+    <h2>หารหัส</h2>
+    <p>กดปุ่มด้านล่างเพื่อไปยังเว็บที่กำหนด แล้วนำรหัสกลับมาใส่ในหน้า Login</p>
+    <button onclick="openCodeSite()">ไปยังเว็บหาโค้ด</button>
+    <a onclick="showLogin()">กลับไปหน้า Login</a>
+</div>
+
+<!-- Scripts -->
+<div id="script-container" style="display:none;">
+<h2>Script Roblox</h2>
+
+<!-- ช่อง 1 -->
+<div class="box">
+    <h3 id="title1" contenteditable="false">Script BPHub สร้างโดย BlackpopHub</h3>
+    <textarea id="text1" readonly>-- สร้างโดยคนไทย
+-- คัดลอกไปวางใช้ได้เลย
+--BlackpopHub
+        
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/BPHUB"), true))() 
+        
+--รหัส 7952
+-- ข้อควรระวัง
+-- รีตัวเมนูอาจหาย</textarea>
+    <button onclick="copyFrom('text1')">📋 คัดลอก</button>
+    <button id="edit1" class="edit-btn" style="display:none;" onclick="editScript(1)">✏️ แก้ไข</button>
+    <button id="save1" class="save-btn" style="display:none;" onclick="saveScript(1)">💾 บันทึก</button>
+    <button id="cancel1" class="cancel-btn" style="display:none;" onclick="cancelEdit(1)">❌ ยกเลิก</button>
+    <div id="text1-msg" class="msg">✔</div>
+    <div id="editing1" class="editing-indicator">🔴 แอดมินกำลังแก้ไข...</div>
+</div>
+
+<!-- ช่อง 2 -->
+<div class="box">
+    <h3 id="title2" contenteditable="false">Script 99 คืน</h3>
+    <textarea id="text2" readonly>loadstring(game:HttpGet("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/FoxnameHub-99Day"))()</textarea>
+    <button onclick="copyFrom('text2')">📋 คัดลอก</button>
+    <button id="edit2" class="edit-btn" style="display:none;" onclick="editScript(2)">✏️ แก้ไข</button>
+    <button id="save2" class="save-btn" style="display:none;" onclick="saveScript(2)">💾 บันทึก</button>
+    <button id="cancel2" class="cancel-btn" style="display:none;" onclick="cancelEdit(2)">❌ ยกเลิก</button>
+    <div id="text2-msg" class="msg">✔</div>
+    <div id="editing2" class="editing-indicator">🔴 แอดมินกำลังแก้ไข...</div>
+</div>
+
+<!-- ช่อง 3 -->
+<div class="box">
+    <h3 id="title3" contenteditable="false">Script 99 คืน เมนูภาษาไทย</h3>
+    <textarea id="text3" readonly>-- ไม่ต้องแปลภาษานะครับ คัดลอกเลยย
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/TH-99Day"))()
+
+-- ใช้อย่างระมัดระวัง!!</textarea>
+    <button onclick="copyFrom('text3')">📋 คัดลอก</button>
+    <button id="edit3" class="edit-btn" style="display:none;" onclick="editScript(3)">✏️ แก้ไข</button>
+    <button id="save3" class="save-btn" style="display:none;" onclick="saveScript(3)">💾 บันทึก</button>
+    <button id="cancel3" class="cancel-btn" style="display:none;" onclick="cancelEdit(3)">❌ ยกเลิก</button>
+    <div id="text3-msg" class="msg">✔</div>
+    <div id="editing3" class="editing-indicator">🔴 แอดมินกำลังแก้ไข...</div>
+</div>
+
+<!-- ช่อง 4 -->
+<div class="box">
+    <h3 id="title4" contenteditable="false">Script Auto ฟาร์มเพชร 99 คืน</h3>
+    <textarea id="text4" readonly> loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/Auto-farm-Gem-99Day"), true))()
+--รหัส 7952</textarea>
+    <button onclick="copyFrom('text4')">📋 คัดลอก</button>
+    <button id="edit4" class="edit-btn" style="display:none;" onclick="editScript(4)">✏️ แก้ไข</button>
+    <button id="save4" class="save-btn" style="display:none;" onclick="saveScript(4)">💾 บันทึก</button>
+    <button id="cancel4" class="cancel-btn" style="display:none;" onclick="cancelEdit(4)">❌ ยกเลิก</button>
+    <div id="text4-msg" class="msg">✔</div>
+    <div id="editing4" class="editing-indicator">🔴 แอดมินกำลังแก้ไข...</div>
+</div>
+
+<!-- ช่อง 5 -->
+<div class="box">
+    <h3 id="title5" contenteditable="false">Script ตกปลา</h3>
+    <textarea id="text5" readonly>loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/Auto-Farm-Fishing"), true))()</textarea>
+    <button onclick="copyFrom('text5')">📋 คัดลอก</button>
+    <button id="edit5" class="edit-btn" style="display:none;" onclick="editScript(5)">✏️ แก้ไข</button>
+    <button id="save5" class="save-btn" style="display:none;" onclick="saveScript(5)">💾 บันทึก</button>
+    <button id="cancel5" class="cancel-btn" style="display:none;" onclick="cancelEdit(5)">❌ ยกเลิก</button>
+    <div id="text5-msg" class="msg">✔</div>
+    <div id="editing5" class="editing-indicator">🔴 แอดมินกำลังแก้ไข...</div>
+</div>
+
+</div>
+
+<div id="logout" onclick="logout()">Logout</div>
+<div id="username-btn" onclick="toggleUserTime()">User</div>
+<div id="user-time-box"></div>
+
+<script>
+// ====== LOGIN & REGISTER ======
+let currentUser = null;
+let loginTime = null;
+let intervalTimer = null;
+let syncTimer = null;
+
+// Show/Hide
+function showRegister(){ 
+    document.getElementById('login-container').style.display='none'; 
+    document.getElementById('register-container').style.display='block'; 
+    document.getElementById('login-msg').innerText=''; 
+}
+function showLogin(){ 
+    document.getElementById('login-container').style.display='block'; 
+    document.getElementById('register-container').style.display='none'; 
+    document.getElementById('script-container').style.display='none'; 
+}
+
+// เปิดเว็บหาโค้ด
+function openCodeSite(){
+    window.open("https://sub2unlock.me/MjMZMF6","_blank");
+}
+
+// Login
+function login(){
+    const u = document.getElementById("login-username").value.trim();
+    const p = document.getElementById("login-password").value.trim();
+
+    if(u==="BP0998" && p==="9980"){
+        currentUser = {username:"BP0998", admin:false, lastLogin:new Date().toLocaleString()};
+        localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
+        showScript();
+        return;
+    }
+
+    if(u==="admin" && p==="2337952"){
+        currentUser = {username:"admin", admin:true, lastLogin:new Date().toLocaleString()};
+        localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
+        showScript();
+        return;
+    }
+
+    document.getElementById("login-msg").innerText = "Username หรือ Password ไม่ถูกต้อง";
+}
+
+// แสดง Script
+function showScript(){
+    document.getElementById('login-container').style.display='none';
+    document.getElementById('register-container').style.display='none';
+    document.getElementById('script-container').style.display='block';
+    document.getElementById('logout').style.display='block';
+    document.getElementById('username-btn').style.display='block';
+    document.getElementById('username-btn').innerText = currentUser.username;
+    loginTime = new Date();
+    startTimer();
+    
+    // แสดงปุ่มแก้ไขถ้าเป็นแอดมิน
+    if(currentUser.admin){
+        for(let i=1; i<=5; i++){
+            document.getElementById('edit'+i).style.display='inline-block';
+        }
+    }
+    
+    // โหลดข้อมูลที่บันทึกไว้
+    loadAllScripts();
+    
+    // เริ่มระบบ Real-time Sync
+    startRealtimeSync();
+}
+
+// Logout
+function logout(){
+    currentUser=null;
+    clearInterval(intervalTimer);
+    clearInterval(syncTimer);
+    localStorage.removeItem("logged_in_user");
+    document.getElementById('script-container').style.display='none';
+    document.getElementById('logout').style.display='none';
+    document.getElementById('username-btn').style.display='none';
+    showLogin();
+}
+
+// Copy Script
+function copyFrom(id){
+    const ta=document.getElementById(id);
+    const text=ta.value;
+    navigator.clipboard.writeText(text).then(()=>showMsg(id));
+}
+function showMsg(id){ const msg=document.getElementById(id+'-msg'); msg.style.display='block'; setTimeout(()=>msg.style.display='none',1500);}
+
+// User Time Display
+function toggleUserTime(){
+    const box = document.getElementById('user-time-box');
+    box.style.display = (box.style.display==='none')?'block':'none';
+}
+function startTimer(){
+    intervalTimer = setInterval(()=>{
+        if(!currentUser) return;
+        let timeHTML = `เวลาอยู่ในเว็บ: ${Math.floor((new Date()-loginTime)/1000)} วินาที<br>`;
+        timeHTML += `เวลาเข้าสู่ระบบล่าสุด: ${currentUser.lastLogin}`;
+        document.getElementById('user-time-box').innerHTML = timeHTML;
+    },500);
+}
+
+// ====== EDIT SYSTEM ======
+let originalContent = {};
+
+function editScript(id){
+    const textarea = document.getElementById('text'+id);
+    const title = document.getElementById('title'+id);
+    
+    // เก็บข้อมูลเดิมไว้
+    originalContent[id] = {
+        text: textarea.value,
+        title: title.innerText
+    };
+    
+    // เปิดโหมดแก้ไข
+    textarea.readOnly = false;
+    textarea.style.background = '#1a3a1a';
+    title.contentEditable = true;
+    title.style.outline = '2px solid #ff9800';
+    
+    // แสดง/ซ่อนปุ่ม
+    document.getElementById('edit'+id).style.display='none';
+    document.getElementById('save'+id).style.display='inline-block';
+    document.getElementById('cancel'+id).style.display='inline-block';
+    
+    // บันทึกสถานะว่ากำลังแก้ไข
+    localStorage.setItem('editing_'+id, 'true');
+    localStorage.setItem('editing_by', currentUser.username);
+}
+
+function saveScript(id){
+    const textarea = document.getElementById('text'+id);
+    const title = document.getElementById('title'+id);
+    
+    // บันทึกข้อมูล
+    localStorage.setItem('script_text_'+id, textarea.value);
+    localStorage.setItem('script_title_'+id, title.innerText);
+    localStorage.setItem('last_update_'+id, new Date().toISOString());
+    
+    // ปิดโหมดแก้ไข
+    textarea.readOnly = true;
+    textarea.style.background = '#222';
+    title.contentEditable = false;
+    title.style.outline = 'none';
+    
+    // แสดง/ซ่อนปุ่ม
+    document.getElementById('edit'+id).style.display='inline-block';
+    document.getElementById('save'+id).style.display='none';
+    document.getElementById('cancel'+id).style.display='none';
+    
+    // ลบสถานะการแก้ไข
+    localStorage.removeItem('editing_'+id);
+    localStorage.removeItem('editing_by');
+    
+    // แสดงข้อความบันทึกสำเร็จ
+    showMsg('text'+id);
+}
+
+function cancelEdit(id){
+    const textarea = document.getElementById('text'+id);
+    const title = document.getElementById('title'+id);
+    
+    // คืนค่าเดิม
+    if(originalContent[id]){
+        textarea.value = originalContent[id].text;
+        title.innerText = originalContent[id].title;
+    }
+    
+    // ปิดโหมดแก้ไข
+    textarea.readOnly = true;
+    textarea.style.background = '#222';
+    title.contentEditable = false;
+    title.style.outline = 'none';
+    
+    // แสดง/ซ่อนปุ่ม
+    document.getElementById('edit'+id).style.display='inline-block';
+    document.getElementById('save'+id).style.display='none';
+    document.getElementById('cancel'+id).style.display='none';
+    
+    // ลบสถานะการแก้ไข
+    localStorage.removeItem('editing_'+id);
+    localStorage.removeItem('editing_by');
+}
+
+function loadAllScripts(){
+    for(let i=1; i<=5; i++){
+        const savedText = localStorage.getItem('script_text_'+i);
+        const savedTitle = localStorage.getItem('script_title_'+i);
+        
+        if(savedText){
+            document.getElementById('text'+i).value = savedText;
+        }
+        if(savedTitle){
+            document.getElementById('title'+i).innerText = savedTitle;
+        }
+    }
+}
+
+// ====== REAL-TIME SYNC ======
+function startRealtimeSync(){
+    syncTimer = setInterval(()=>{
+        for(let i=1; i<=5; i++){
+            // ตรวจสอบว่ามีคนกำลังแก้ไขหรือไม่
+            const isEditing = localStorage.getItem('editing_'+i);
+            const editingBy = localStorage.getItem('editing_by');
+            const indicator = document.getElementById('editing'+i);
+            
+            if(isEditing === 'true' && editingBy !== currentUser.username){
+                // แสดงว่ามีคนกำลังแก้ไข
+                indicator.style.display = 'block';
+                indicator.innerText = `🔴 ${editingBy} กำลังแก้ไข...`;
+            } else {
+                indicator.style.display = 'none';
+            }
+            
+            // อัพเดทข้อมูลถ้าไม่ใช่คนที่กำลังแก้ไข
+            if(editingBy !== currentUser.username){
+                const lastUpdate = localStorage.getItem('last_update_'+i);
+                const currentText = document.getElementById('text'+i).value;
+                const currentTitle = document.getElementById('title'+i).innerText;
+                const savedText = localStorage.getItem('script_text_'+i);
+                const savedTitle = localStorage.getItem('script_title_'+i);
+                
+                // อัพเดทถ้าข้อมูลเปลี่ยน
+                if(savedText && savedText !== currentText && !document.getElementById('text'+i).readOnly === false){
+                    document.getElementById('text'+i).value = savedText;
+                }
+                if(savedTitle && savedTitle !== currentTitle && document.getElementById('title'+i).contentEditable === 'false'){
+                    document.getElementById('title'+i).innerText = savedTitle;
+                }
+            }
+        }
+    }, 500); // ตรวจสอบทุก 0.5 วินาที
+}
+
+// Auto-login หากเคยล็อกอิน
+window.onload = function(){
+    const stored = localStorage.getItem("logged_in_user");
+    if(stored){
+        currentUser = JSON.parse(stored);
+        showScript();
+    }
+}
+</script>
+
+</body>
+</html>
