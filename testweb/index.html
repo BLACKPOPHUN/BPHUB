@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบล็อกอิน Admin แบบ Real-time</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Dashboard */
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        .btn-add {
+            padding: 12px 24px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add:hover {
+            background: #229954;
+        }
+
+        .fields-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .field-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .field-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .field-header h3 {
+            color: #333;
+            font-size: 18px;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            padding: 6px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn-icon:hover {
+            background: #f0f0f0;
+        }
+
+        .field-content {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            color: #333;
+        }
+
+        .btn-copy {
+            width: 100%;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-copy:hover {
+            background: #2980b9;
+        }
+
+        .btn-copy.copied {
+            background: #27ae60;
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-form input,
+        .edit-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .edit-form textarea {
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .edit-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            padding: 10px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .note-box {
+            background: rgba(255,255,255,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .fields-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1>🔐 เข้าสู่ระบบ</h1>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="ชื่อผู้ใช้" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="รหัสผ่าน" autocomplete="current-password">
+            </div>
+            <button class="btn" onclick="login()">เข้าสู่ระบบ</button>
+            <div class="info-box">
+                <p><strong>ℹ️ ทดลองใช้:</strong></p>
+                <p>Admin: admin / admin123</p>
+                <p>User: user / user123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1 id="dashboardTitle">📋 Dashboard</h1>
+                    <p id="welcomeText">ยินดีต้อนรับ</p>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i data-lucide="log-out"></i>
+                    ออกจากระบบ
+                </button>
+            </div>
+
+            <div id="adminControls" class="hidden">
+                <button class="btn-add" onclick="addField()">
+                    <i data-lucide="plus"></i>
+                    เพิ่มช่องใหม่
+                </button>
+            </div>
+
+            <div id="fieldsContainer" class="fields-grid"></div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <h2>ยังไม่มีข้อมูล</h2>
+                <p id="emptyStateText"></p>
+            </div>
+
+            <div class="note-box">
+                <p><strong>ℹ️ หมายเหตุ:</strong> ข้อมูลจะอัพเดทแบบ Real-time ทุก 2 วินาที และแสดงผลในทุกเครื่องที่เปิดหน้านี้</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isLoggedIn = false;
+        let isAdmin = false;
+        let fields = [];
+        let editingFieldId = null;
+
+        // Load data from data.json
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                fields = data.fields || [];
+                renderFields();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // ถ้าไม่มีไฟล์ ใช้ข้อมูลตัวอย่าง
+                if (fields.length === 0) {
+                    fields = [
+                        { id: 1, name: 'API Key', content: 'sk-1234567890abcdef' },
+                        { id: 2, name: 'Database URL', content: 'mongodb://localhost:27017' }
+                    ];
+                    renderFields();
+                }
+            }
+        }
+
+        // Save data to data.json (จำลองการบันทึก - ในการใช้งานจริงต้องมี backend)
+        async function saveData() {
+            const data = { fields: fields };
+            console.log('Saving data:', data);
+            // ในการใช้งานจริง ต้องส่งข้อมูลไปยัง server
+            // เช่น: await fetch('/api/save', { method: 'POST', body: JSON.stringify(data) });
+            
+            // สำหรับ Demo: แสดงข้อมูลที่ควรบันทึกใน data.json
+            console.log('Data to save to data.json:', JSON.stringify(data, null, 2));
+            alert('บันทึกข้อมูลแล้ว! (ตรวจสอบใน Console)');
+        }
+
+        // Login
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'admin123') {
+                isLoggedIn = true;
+                isAdmin = true;
+                showDashboard();
+            } else if (username === 'user' && password === 'user123') {
+                isLoggedIn = true;
+                isAdmin = false;
+                showDashboard();
+            } else {
+                alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            }
+        }
+
+        // Logout
+        function logout() {
+            isLoggedIn = false;
+            isAdmin = false;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            if (isAdmin) {
+                document.getElementById('dashboardTitle').textContent = '🔧 Admin Panel';
+                document.getElementById('welcomeText').textContent = 'ยินดีต้อนรับ, Admin';
+                document.getElementById('adminControls').classList.remove('hidden');
+                document.getElementById('emptyStateText').textContent = 'คลิก "เพิ่มช่องใหม่" เพื่อเริ่มต้น';
+            } else {
+                document.getElementById('dashboardTitle').textContent = '📋 User Dashboard';
+                document.getElementById('welcomeText').textContent = 'ยินดีต้อนรับ, User';
+                document.getElementById('adminControls').classList.add('hidden');
+                document.getElementById('emptyStateText').textContent = '';
+            }
+            
+            loadData();
+            // Auto-refresh ทุก 2 วินาที
+            setInterval(loadData, 2000);
+        }
+
+        // Render Fields
+        function renderFields() {
+            const container = document.getElementById('fieldsContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (fields.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            container.innerHTML = fields.map(field => `
+                <div class="field-card">
+                    ${editingFieldId === field.id ? `
+                        <div class="edit-form">
+                            <input type="text" id="editName${field.id}" value="${field.name}" placeholder="ชื่อช่อง">
+                            <textarea id="editContent${field.id}" placeholder="เนื้อหา">${field.content}</textarea>
+                            <div class="edit-buttons">
+                                <button class="btn-save" onclick="saveEdit(${field.id})">บันทึก</button>
+                                <button class="btn-cancel" onclick="cancelEdit()">ยกเลิก</button>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="field-header">
+                            <h3>${field.name}</h3>
+                            ${isAdmin ? `
+                                <div class="field-actions">
+                                    <button class="btn-icon" onclick="startEdit(${field.id})">
+                                        <i data-lucide="edit-2" style="color: #3498db"></i>
+                                    </button>
+                                    <button class="btn-icon" onclick="deleteField(${field.id})">
+                                        <i data-lucide="trash-2" style="color: #e74c3c"></i>
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="field-content">${field.content}</div>
+                        <button class="btn-copy" onclick="copyToClipboard('${field.content.replace(/'/g, "\\'")}', ${field.id})">
+                            <i data-lucide="copy" id="copyIcon${field.id}"></i>
+                            <span id="copyText${field.id}">คัดลอกโค้ด</span>
+                        </button>
+                    `}
+                </div>
+            `).join('');
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+        }
+
+        // Add Field
+        function addField() {
+            const newField = {
+                id: Date.now(),
+                name: 'ช่องใหม่',
+                content: 'เนื้อหา...'
+            };
+            fields.push(newField);
+            renderFields();
+            saveData();
+        }
+
+        // Delete Field
+        function deleteField(id) {
+            if (confirm('คุณต้องการลบช่องนี้ใช่หรือไม่?')) {
+                fields = fields.filter(f => f.id !== id);
+                renderFields();
+                saveData();
+            }
+        }
+
+        // Start Edit
+        function startEdit(id) {
+            editingFieldId = id;
+            renderFields();
+        }
+
+        // Cancel Edit
+        function cancelEdit() {
+            editingFieldId = null;
+            renderFields();
+        }
+
+        // Save Edit
+        function saveEdit(id) {
+            const name = document.getElementById(`editName${id}`).value;
+            const content = document.getElementById(`editContent${id}`).value;
+            
+            fields = fields.map(f => f.id === id ? { ...f, name, content } : f);
+            editingFieldId = null;
+            renderFields();
+            saveData();
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text, id) {
+            navigator.clipboard.writeText(text).then(() => {
+                const copyText = document.getElementById(`copyText${id}`);
+                const copyIcon = document.getElementById(`copyIcon${id}`);
+                const btn = copyText.parentElement;
+                
+                copyText.textContent = 'คัดลอกแล้ว!';
+                btn.classList.add('copied');
+                copyIcon.setAttribute('data-lucide', 'check');
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    copyText.textContent = 'คัดลอกโค้ด';
+                    btn.classList.remove('copied');
+                    copyIcon.setAttribute('data-lucide', 'copy');
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        // Enter key to login
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('username').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') login();
+            });
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') login();
+            });
+        });
+    </script>
+</body>
+</html>
