@@ -88,7 +88,7 @@ let storageAvailable = false;
 const initialScripts = [
     {
         id: 1,
-        title: "Script BPHub สร้างโดย BlackpopHub",
+        title: "Script BPHub สร้างโดย BlackpopHub (1)",
         content: `-- สร้างโดยคนไทย
 -- คัดลอกไปวางใช้ได้เลย
 --BlackpopHub
@@ -101,17 +101,17 @@ loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-B
     },
     {
     	id: 2,
-        title: "Script Blox Fruit",
+        title: "Script Blox Fruit (2)",
         content: `loadstring(game:HttpGet("https://raw.githubusercontent.com/flazhy/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()`
     },
     {
         id: 3,
-        title: "Script 99 คืน",
+        title: "Script 99 คืน (3)",
         content: `loadstring(game:HttpGet("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/FoxnameHub-99Day"))()`
     },
     {
         id: 4,
-        title: "Script 99 คืน เมนูภาษาไทย",
+        title: "Script 99 คืน เมนูภาษาไทย (4)",
         content: `-- ไม่ต้องแปลภาษานะครับ คัดลอกเลยย
 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/TH-99Day"))()
@@ -120,18 +120,18 @@ loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-B
     },
     {
         id: 5,
-        title: "Script Auto ฟาร์มเพชร 99 คืน",
+        title: "Script Auto ฟาร์มเพชร 99 คืน (5)",
         content: ` loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/Auto-farm-Gem-99Day"), true))()
 --รหัส 7952`
     },
     {
         id: 6,
-        title: "Script ตกปลา",
+        title: "Script ตกปลา (6)",
         content: `loadstring(game:HttpGet(("https://raw.githubusercontent.com/BLACKPOPHUN/script-BPHUB/refs/heads/main/Script/Auto-Farm-Fishing"), true))()`
     },
 	{
     	id: 7,
-        title: "Script [FPS] Flick",
+        title: "Script [FPS] Flick (7)",
         content: `getgenv().unxns = { loadfrom = "ScriptBlox" } -- you can edit this btw, if you are an content creator (or not idk!!)
 
 loadstring(game:HttpGet("https://apigetunx.vercel.app/UNX.lua",true))()`
@@ -352,7 +352,7 @@ async function updateOnlineDisplay(){
 function startHeartbeat(){
     heartbeatTimer = setInterval(async () => {
         await updateOnlineStatus();
-    }, 5000); // อัพเดททุก 5 วินาที
+    }, 500); // อัพเดททุก 0.5 วินาที
 }
 
 // ====== SCRIPTS MANAGEMENT ======
