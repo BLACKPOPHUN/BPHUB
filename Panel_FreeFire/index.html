@@ -80,7 +80,7 @@ color:#ccc;
 <h1>พาแนล ฟีฟาย</h1>
 
 <button id="btnFree" class="control-btn free" onclick="toggleFree()">
-☠️ ล็อกหัว : ปิดอยู่
+☠️ ล็อกหัว(84%) : ปิดอยู่
 </button>
 
 <button id="btnVip" class="control-btn vip" onclick="toggleVip()">
@@ -103,12 +103,12 @@ const btn = document.getElementById("btnFree");
 
 if(freeOn){
 btn.classList.add("active");
-btn.innerHTML = "☠️ ล็อกหัว : เปิดอยู่";
+btn.innerHTML = "☠️ ล็อกหัว(84%) : เปิดอยู่";
 document.getElementById("statusText").innerText =
 "สถานะระบบ : เปิดโหมด ล็อกหัว แล้ว";
 }else{
 btn.classList.remove("active");
-btn.innerHTML = "☠️ ล็อกหัว : ปิดอยู่";
+btn.innerHTML = "☠️ ล็อกหัว(84%) : ปิดอยู่";
 document.getElementById("statusText").innerText =
 "สถานะระบบ : ปิดโหมด ล็อกหัว";
 }
