@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel FF</title>
+
+<style>
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#000;
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+.panel{
+background:#120000;
+padding:30px;
+border-radius:18px;
+width:300px;
+text-align:center;
+box-shadow:0 0 25px red;
+border:1px solid red;
+}
+
+h1{
+color:#ff4444;
+margin-bottom:25px;
+text-shadow:0 0 10px red;
+}
+
+/* ปุ่มหลัก */
+.control-btn{
+width:100%;
+padding:16px;
+margin:12px 0;
+font-size:18px;
+font-weight:bold;
+border:none;
+border-radius:14px;
+cursor:pointer;
+color:#fff;
+transition:0.25s;
+box-shadow:0 0 12px rgba(255,0,0,.6);
+}
+
+/* FREE */
+.free{
+background:linear-gradient(90deg,#ff0000,#ff5555);
+}
+
+/* VIP */
+.vip{
+background:linear-gradient(90deg,#ffaa00,#ffdd55);
+color:#000;
+box-shadow:0 0 15px gold;
+}
+
+/* เปิดแล้ว */
+.active{
+background:linear-gradient(90deg,#00cc44,#55ff88)!important;
+color:#000!important;
+box-shadow:0 0 18px #00ff66!important;
+}
+
+.status{
+margin-top:15px;
+font-size:14px;
+color:#ccc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+<h1>พาแนล ฟีฟาย</h1>
+
+<button id="btnFree" class="control-btn free" onclick="toggleFree()">
+☠️ ล็อกหัว : ปิดอยู่
+</button>
+
+<button id="btnVip" class="control-btn vip" onclick="toggleVip()">
+🖥️ จอลื่น : ปิดอยู่
+</button>
+
+<div class="status" id="statusText">
+สถานะระบบ : ยังไม่เปิดใช้งาน
+</div>
+</div>
+
+<script>
+let freeOn = false;
+let vipOn = false;
+
+/* ปุ่ม FREE */
+function toggleFree(){
+freeOn = !freeOn;
+const btn = document.getElementById("btnFree");
+
+if(freeOn){
+btn.classList.add("active");
+btn.innerHTML = "☠️ ล็อกหัว : เปิดอยู่";
+document.getElementById("statusText").innerText =
+"สถานะระบบ : เปิดโหมด ล็อกหัว แล้ว";
+}else{
+btn.classList.remove("active");
+btn.innerHTML = "☠️ ล็อกหัว : ปิดอยู่";
+document.getElementById("statusText").innerText =
+"สถานะระบบ : ปิดโหมด ล็อกหัว";
+}
+}
+
+/* ปุ่ม VIP */
+function toggleVip(){
+vipOn = !vipOn;
+const btn = document.getElementById("btnVip");
+
+if(vipOn){
+btn.classList.add("active");
+btn.innerHTML = "🖥️ จอลื่น : เปิดอยู่";
+document.getElementById("statusText").innerText =
+"สถานะระบบ : เปิดโหมด จอลื่น แล้ว";
+}else{
+btn.classList.remove("active");
+btn.innerHTML = "🖥️ จอลื่น : ปิดอยู่";
+document.getElementById("statusText").innerText =
+"สถานะระบบ : ปิดโหมด จอลื่น";
+}
+}
+</script>
+
+</body>
+</html>
