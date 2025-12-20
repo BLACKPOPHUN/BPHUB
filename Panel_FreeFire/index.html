@@ -54,8 +54,7 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 .status-dashboard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:30px;margin-bottom:25px;backdrop-filter:blur(10px);animation:slideIn 1.2s ease-out .6s both}
 .dashboard-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap;gap:15px}
 .status-indicator{display:flex;align-items:center;gap:12px}
-.status-dot{width:16px;height:16px;border-radius:50%;background:#666;box-shadow:none;transition:all .3s ease}
-.status-dot.active{background:#00ff88;box-shadow:0 0 20px #00ff88;animation:pulse 2s ease-in-out infinite}
+.status-dot{width:16px;height:16px;border-radius:50%;background:#666;box-shadow:none;transition:all .3s ease;display: inline-block;}
 .status-text{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
 .time-display{font-size:14px;color:#ff4477;font-weight:600;letter-spacing:1px;font-family:'Courier New',monospace}
 
@@ -93,6 +92,14 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 .active:hover{box-shadow:0 12px 35px rgba(0,255,136,.7),inset 0 1px 0 rgba(255,255,255,.3)!important}
 .active .btn-status{animation:statusBlink 1.5s ease-in-out infinite}
 
+/* --- SETTINGS SLIDER --- */
+.settings-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:25px;backdrop-filter:blur(10px)}
+.settings-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.slider-item{margin-bottom:20px}
+.slider-header{display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#ccc}
+.slider{width:100%;height:6px;background:rgba(255,255,255,.1);border-radius:5px;outline:none;appearance:none}
+.slider::-webkit-slider-thumb{appearance:none;width:18px;height:18px;background:#ff0040;border-radius:50%;cursor:pointer;box-shadow:0 0 10px #ff0040}
+
 /* --- NOTIFICATION --- */
 .notification{position:fixed;top:20px;right:20px;background:linear-gradient(135deg,rgba(0,255,136,.95),rgba(0,204,68,.95));color:#000;padding:15px 25px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 10px 30px rgba(0,255,136,.4);transform:translateX(400px);transition:transform .5s cubic-bezier(.68,-.55,.265,1.55);z-index:1000}
 .notification.show{transform:translateX(0)}
@@ -108,7 +115,6 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 <div class="main-panel">
 <div class="panel-inner">
 
-<!-- HEADER -->
 <div class="header">
 <div class="logo">🎮</div>
 <h1>FreeFire Panel</h1>
@@ -116,12 +122,11 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 <div class="version-badge">VERSION 1.0 ULTIMATE</div>
 </div>
 
-<!-- STATUS DASHBOARD -->
 <div class="status-dashboard">
 <div class="dashboard-header">
 <div class="status-indicator">
-<div class="status-dot" id="mainStatusDot"></div>
-<div class="status-text" id="mainStatusText">ยังไม่เปิดใช้งาน</div>
+<div class="status-dot" id="mainStatusDot">🟢</div>
+<div class="status-text" id="mainStatusText">พร้อมใช้งาน</div>
 </div>
 <div class="time-display" id="timeDisplay">00:00:00</div>
 </div>
@@ -145,7 +150,6 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 </div>
 </div>
 
-<!-- CONTROL SECTIONS -->
 <div class="control-section">
 <div class="section-title">☠️ โหมดพื้นฐาน</div>
 <div class="controls">
@@ -170,7 +174,6 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 </div>
 </div>
 
-<!-- SETTINGS PANEL -->
 <div class="settings-panel">
 <div class="settings-title">⚙️ ตั้งค่าขั้นสูง</div>
 <div class="slider-group">
@@ -193,11 +196,7 @@ h1{color:#fff;font-size:48px;font-weight:900;margin-bottom:12px;animation:glow 2
 </div>
 </div>
 
-</div> <!-- panel-inner -->
-</div> <!-- main-panel -->
-</div> <!-- container -->
-
-<script>
+</div> </div> </div> <script>
 // --- PARTICLES ---
 const particlesContainer = document.getElementById('particles');
 for(let i=0;i<50;i++){
@@ -236,7 +235,10 @@ sliders.forEach(s=>{
     const barEl = document.getElementById(s.bar);
     slider.addEventListener('input',()=>{
         valueEl.innerText = slider.value+'%';
-        barEl.style.width = slider.value+'%';
+        // อัปเดตแถบเฉพาะเมื่อมีปุ่มในหมวดนั้นเปิดอยู่
+        const relatedBtns = controls.filter(c => c.bar === s.bar);
+        const isAnyActive = relatedBtns.some(c => document.getElementById(c.btn).classList.contains('active'));
+        if(isAnyActive) barEl.style.width = slider.value+'%';
     });
 });
 
@@ -257,6 +259,25 @@ function showNotification(text){
     setTimeout(()=>{notif.classList.remove('show');},2000);
 }
 
+// --- NEW FUNCTION: UPDATE GLOBAL STATUS ---
+function updateGlobalStatus() {
+    const mainDot = document.getElementById('mainStatusDot');
+    const mainText = document.getElementById('mainStatusText');
+    const anyActive = controls.some(c => document.getElementById(c.btn).classList.contains('active'));
+    
+    if (anyActive) {
+        mainDot.innerText = '🔴';
+        mainDot.style.filter = 'drop-shadow(0 0 8px #ff0040)';
+        mainText.innerText = 'กำลังทำงาน...';
+        mainText.style.color = '#ff0040';
+    } else {
+        mainDot.innerText = '🟢';
+        mainDot.style.filter = 'none';
+        mainText.innerText = 'พร้อมใช้งาน';
+        mainText.style.color = '#fff';
+    }
+}
+
 controls.forEach(c=>{
     const btn = document.getElementById(c.btn);
     const statusEl = document.getElementById(c.status);
@@ -266,10 +287,20 @@ controls.forEach(c=>{
         const isActive = btn.classList.toggle('active');
         statusEl.innerText = isActive ? 'เปิดอยู่':'ปิดอยู่';
         indicatorEl.innerText = isActive ? '●':'○';
-        // update bar
-        const sliderValue = parseInt(document.getElementById(sliders.find(s=>s.bar===c.bar).value).innerText);
-        barEl.style.width = isActive ? sliderValue+'%' : '0%';
-        showNotification(`${statusEl.innerText} ${btn.closest('.control-section').querySelector('.section-title').innerText}`);
+        
+        // update bar logic for multiple buttons in same category
+        const relatedBtns = controls.filter(ctrl => ctrl.bar === c.bar);
+        const isAnyInGroupActive = relatedBtns.some(ctrl => document.getElementById(ctrl.btn).classList.contains('active'));
+        
+        const sliderConfig = sliders.find(s => s.bar === c.bar);
+        const currentSliderVal = document.getElementById(sliderConfig.id).value;
+        
+        barEl.style.width = isAnyInGroupActive ? currentSliderVal + '%' : '0%';
+        
+        showNotification(`${isActive ? 'เปิด' : 'ปิด'}การใช้งานสำเร็จ!`);
+        
+        // Call global update
+        updateGlobalStatus();
     });
 });
 </script>
