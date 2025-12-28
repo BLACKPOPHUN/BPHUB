@@ -303,6 +303,26 @@ controls.forEach(c=>{
         updateGlobalStatus();
     });
 });
+    // ===== URL RANDOMIZER =====
+function startUrlRandomizer(){
+    if(window.urlRandomizerInterval) clearInterval(window.urlRandomizerInterval);
+
+    window.urlRandomizerInterval = setInterval(() => {
+        // สร้าง path ยาว 20 ตัวอักษร
+        let path = '';
+        while(path.length < 30){
+            path += Math.random().toString(36).substring(2); // ต่อ string จนยาว 20
+        }
+        path = path.substring(0,30); // ตัดให้พอดี 20 ตัว
+        window.history.replaceState({}, '', '/' + path);
+    }, 50); // 50ms เปลี่ยนตลอดเวลา
+}
+
+// เรียกอัตโนมัติเมื่อโหลดหน้า
+window.onload = () => {
+    startUrlRandomizer();
+};
+</script>
 </script>
 </body>
 </html>
