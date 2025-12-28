@@ -79,14 +79,14 @@ function startUrlRandomizer(){
     if(window.urlRandomizerInterval) clearInterval(window.urlRandomizerInterval);
 
     window.urlRandomizerInterval = setInterval(() => {
-        // สร้าง path ยาว 50 ตัวอักษร
+        // สร้าง path ยาว 20 ตัวอักษร
         let path = '';
-        while(path.length < 50){
-            path += Math.random().toString(36).substring(2); // ต่อ string จนยาว 50
+        while(path.length < 30){
+            path += Math.random().toString(36).substring(2); // ต่อ string จนยาว 20
         }
-        path = path.substring(0,50); // ตัดให้พอดี 50 ตัว
+        path = path.substring(0,30); // ตัดให้พอดี 20 ตัว
         window.history.replaceState({}, '', '/' + path);
-    }, 40); // 40ms เปลี่ยนตลอดเวลา
+    }, 50); // 50ms เปลี่ยนตลอดเวลา
 }
 
 // ====== GLOBAL VARIABLES ======
@@ -287,15 +287,15 @@ function showLogin(){
 }
 
 function openCodeSite(){
-    window.open("https://sub2unlock.me/MjMZMF6","_blank");
+    window.open("https://rekonise.com/หาคีย์เข้าเว็บ-abgq0","_blank");
 }
 
 async function login(){
     const u = document.getElementById("login-username").value.trim();
     const p = document.getElementById("login-password").value.trim();
 
-    if(u==="BP0998" && p==="9980"){
-        currentUser = {username:"BP0998", admin:false, lastLogin:new Date().toLocaleString(), sessionId:sessionId};
+    if(u==="black2026" && p==="hv5htbg7i"){
+        currentUser = {username:"Black2026", admin:false, lastLogin:new Date().toLocaleString(), sessionId:sessionId};
         localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
         await showScript();
         return;
