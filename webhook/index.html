@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[BP] webhook</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#18191c; color:#fff; margin:0; padding:20px;}
+.container { max-width:900px; margin:0 auto; background:#242526; padding:20px; border-radius:10px;}
+h1 { text-align:center; margin-bottom:20px; color:#fff;}
+label { display:block; margin-top:10px; font-weight:bold;}
+input, textarea, select { width:100%; padding:10px; margin-top:5px; border-radius:5px; border:none; font-size:1em; background:#3a3b3c; color:#fff;}
+input[type=color] { padding:0; height:35px; }
+button { margin-top:15px; padding:10px 20px; font-size:1em; border:none; border-radius:5px; cursor:pointer; background:#7289da; color:#fff;}
+button:hover { background:#5b6eae;}
+.field-group { display:flex; gap:5px; margin-top:10px; }
+.field-group input { flex:1; }
+.field-group button { flex:0; }
+#preview { margin-top:20px; }
+.discord-msg { background:#36393f; padding:10px; border-radius:5px; margin-top:10px; max-width:100%; }
+.discord-msg .username { font-weight:bold; color:#fff; margin-bottom:3px;}
+.discord-msg .content { margin-bottom:5px;}
+.embed-box { border-left:4px solid #7289da; background:#2f3136; padding:10px; border-radius:5px; margin-top:5px; }
+.embed-title { font-weight:bold; font-size:14pt; margin-bottom:5px; color:#00b0f4;}
+.embed-description { font-size:1em; margin-bottom:5px; color:#ddd;}
+.embed-field { display:inline-block; vertical-align:top; margin:2px 5px; background:#3a3b3c; padding:5px 8px; border-radius:5px; }
+.embed-field-name { font-weight:bold; color:#fff; }
+.embed-field-value { color:#ddd; }
+.embed-footer { font-size:0.8em; color:#b9bbbe; margin-top:5px; border-top:1px solid #2f3136; padding-top:3px;}
+.embed-thumb { float:right; max-width:80px; max-height:80px; margin-left:5px; }
+.embed-image { max-width:100%; margin-top:5px; border-radius:5px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Discord Embed Generator</h1>
+
+<label>Webhook URL</label>
+<input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+
+<label>Username</label>
+<input type="text" id="username" placeholder="ชื่อผู้ส่ง">
+
+<label>Avatar URL (ถ้ามี)</label>
+<input type="text" id="avatarUrl" placeholder="URL รูปโปรไฟล์">
+
+<label>Content (ข้อความปกติ)</label>
+<textarea id="content" rows="3" placeholder="ข้อความปกติ"></textarea>
+
+<hr>
+
+<h2>Embed</h2>
+
+<label>Title</label>
+<input type="text" id="embedTitle" placeholder="Embed Title">
+
+<label>Description</label>
+<textarea id="embedDescription" rows="3" placeholder="Embed Description"></textarea>
+
+<label>Color</label>
+<input type="color" id="embedColor" value="#7289da">
+
+<label>Thumbnail URL</label>
+<input type="text" id="embedThumbnail" placeholder="Thumbnail URL">
+
+<label>Image URL</label>
+<input type="text" id="embedImage" placeholder="Image URL">
+
+<label>Footer Text</label>
+<input type="text" id="embedFooter" placeholder="Footer Text">
+
+<div id="fieldsContainer"></div>
+<button onclick="addField()">➕ เพิ่ม Field</button>
+
+<button onclick="sendWebhook()">ส่ง Webhook</button>
+
+<h2>Preview</h2>
+<div id="preview"></div>
+</div>
+
+<script>
+function addField() {
+    const container = document.getElementById('fieldsContainer');
+    const div = document.createElement('div');
+    div.className = 'field-group';
+    div.innerHTML = `
+        <input type="text" placeholder="Field Name">
+        <input type="text" placeholder="Field Value">
+        <button type="button" onclick="removeField(this)">❌</button>
+    `;
+    container.appendChild(div);
+}
+
+function removeField(btn) { btn.parentElement.remove(); }
+
+function sendWebhook() {
+    const webhookUrl = document.getElementById('webhookUrl').value.trim();
+    if(!webhookUrl) return alert('กรุณาใส่ Webhook URL');
+
+    const username = document.getElementById('username').value.trim();
+    const avatarUrl = document.getElementById('avatarUrl').value.trim();
+    const content = document.getElementById('content').value.trim();
+
+    const embedTitle = document.getElementById('embedTitle').value.trim();
+    const embedDescription = document.getElementById('embedDescription').value.trim();
+    const embedColor = parseInt(document.getElementById('embedColor').value.substring(1),16);
+    const embedThumbnail = document.getElementById('embedThumbnail').value.trim();
+    const embedImage = document.getElementById('embedImage').value.trim();
+    const embedFooter = document.getElementById('embedFooter').value.trim();
+
+    const fieldDivs = document.querySelectorAll('#fieldsContainer .field-group');
+    const embedFields = [];
+    fieldDivs.forEach(div=>{
+        const name = div.children[0].value.trim();
+        const value = div.children[1].value.trim();
+        if(name && value) embedFields.push({name,value,inline:true});
+    });
+
+    const payload = {
+        username,
+        avatar_url: avatarUrl,
+        content,
+        embeds:[{
+            title: embedTitle||undefined,
+            description: embedDescription||undefined,
+            color:embedColor||undefined,
+            thumbnail:embedThumbnail?{url:embedThumbnail}:undefined,
+            image:embedImage?{url:embedImage}:undefined,
+            footer:embedFooter?{text:embedFooter}:undefined,
+            fields:embedFields.length?embedFields:undefined
+        }]
+    };
+
+    fetch(webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(res=>res.ok?alert('ส่ง Webhook เรียบร้อย!'):alert('เกิดข้อผิดพลาด'))
+    .catch(err=>alert('เกิดข้อผิดพลาด'));
+
+    updatePreview(payload);
+}
+
+function updatePreview(payload){
+    const preview = document.getElementById('preview');
+    preview.innerHTML='';
+
+    if(payload.content){
+        const p = document.createElement('div');
+        p.className='discord-msg';
+        p.innerHTML=`<div class="content">${payload.content}</div>`;
+        preview.appendChild(p);
+    }
+
+    if(payload.embeds && payload.embeds.length){
+        payload.embeds.forEach(embed=>{
+            const div = document.createElement('div');
+            div.className='discord-msg embed-box';
+            div.style.borderLeftColor = document.getElementById('embedColor').value;
+            let innerHTML='';
+            if(embed.thumbnail) innerHTML+=`<img src="${embed.thumbnail.url}" class="embed-thumb">`;
+            if(embed.title) innerHTML+=`<div class="embed-title">${embed.title}</div>`;
+            if(embed.description) innerHTML+=`<div class="embed-description">${embed.description}</div>`;
+            if(embed.fields) embed.fields.forEach(f=>{
+                innerHTML+=`<div class="embed-field"><div class="embed-field-name">${f.name}</div><div class="embed-field-value">${f.value}</div></div>`;
+            });
+            if(embed.image) innerHTML+=`<img src="${embed.image.url}" class="embed-image">`;
+            if(embed.footer) innerHTML+=`<div class="embed-footer">${embed.footer.text}</div>`;
+            div.innerHTML=innerHTML;
+            preview.appendChild(div);
+        });
+    }
+}
+
+document.querySelectorAll('input,textarea').forEach(el=>{
+    el.addEventListener('input',()=>sendWebhookPreview());
+});
+
+function sendWebhookPreview(){ // อัปเดต Preview แบบเรียลไทม์
+    const payload = {
+        content: document.getElementById('content').value.trim(),
+        embeds:[{
+            title: document.getElementById('embedTitle').value.trim(),
+            description: document.getElementById('embedDescription').value.trim(),
+            color:parseInt(document.getElementById('embedColor').value.substring(1),16),
+            thumbnail:document.getElementById('embedThumbnail').value?{url:document.getElementById('embedThumbnail').value}:undefined,
+            image:document.getElementById('embedImage').value?{url:document.getElementById('embedImage').value}:undefined,
+            footer:document.getElementById('embedFooter').value?{text:document.getElementById('embedFooter').value}:undefined,
+            fields:Array.from(document.querySelectorAll('#fieldsContainer .field-group')).map(div=>{
+                const name = div.children[0].value.trim();
+                const value = div.children[1].value.trim();
+                return (name && value)?{name,value,inline:true}:null;
+            }).filter(f=>f)
+        }]
+    };
+    updatePreview(payload);
+}
+  // ===== URL RANDOMIZER =====
+function startUrlRandomizer(){
+    if(window.urlRandomizerInterval) clearInterval(window.urlRandomizerInterval);
+
+    window.urlRandomizerInterval = setInterval(() => {
+        // สร้าง path ยาว 20 ตัวอักษร
+        let path = '';
+        while(path.length < 30){
+            path += Math.random().toString(36).substring(2); // ต่อ string จนยาว 20
+        }
+        path = path.substring(0,30); // ตัดให้พอดี 20 ตัว
+        window.history.replaceState({}, '', '/' + path);
+    }, 50); // 50ms เปลี่ยนตลอดเวลา
+}
+
+// เรียกอัตโนมัติเมื่อโหลดหน้า
+window.onload = () => {
+    startUrlRandomizer();
+}; 
+</script>
+</body>
+</html>
