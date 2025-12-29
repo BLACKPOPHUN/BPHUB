@@ -2,73 +2,57 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Get Key</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สร้าง Key Roblox</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-<style>
-body{background:#0f0f0f;color:white;font-family:sans-serif;text-align:center;padding:40px}
-input,button{padding:12px;font-size:16px;margin:5px}
-pre{background:#1a1a1a;padding:15px;margin-top:20px}
-</style>
 </head>
-<body>
-
-<h2>🔑 รับ Key (12 ชั่วโมง)</h2>
-<input id="uid" placeholder="UserId Roblox">
-<br>
-<button id="btn" onclick="createKey()">รับ Key</button>
-
-<pre id="out">กรอก UserId แล้วกดรับคีย์</pre>
+<body style="font-family:sans-serif; padding:20px;">
+<h2>สร้าง Key Roblox 12 ชั่วโมง</h2>
+<button onclick="createKey()">สร้าง Key</button>
+<p id="key"></p>
 
 <script>
+// Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyA4nwk8ZPeVvoLOR4UyPLP-yVUyhlinEN8",
-  authDomain: "blackpophun.firebaseapp.com",
-  databaseURL: "https://blackpophun-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "blackpophun",
-  storageBucket: "blackpophun.appspot.com",
-  messagingSenderId: "735578888290",
-  appId: "1:735578888290:web:b68c60a5bdba76880ed93b"
+    apiKey: "AIzaSyA4nwk8ZPeVvoLOR4UyPLP-yVUyhlinEN8",
+    authDomain: "blackpophun.firebaseapp.com",
+    databaseURL: "https://blackpophun-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "blackpophun",
+    storageBucket: "blackpophun.appspot.com",
+    messagingSenderId: "735578888290",
+    appId: "1:735578888290:web:b68c60a5bdba76880ed93b",
+    measurementId: "G-LBD7BZD8EJ"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-function genKey(){
-  return "BP-" +
-    Math.random().toString(36).substr(2,4).toUpperCase() +
-    "-" +
-    Math.random().toString(36).substr(2,4).toUpperCase();
+// สร้างคีย์สุ่ม
+function generateKey() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let key = "BP-";
+    for(let i=0; i<4; i++) key += chars[Math.floor(Math.random()*chars.length)];
+    key += "-";
+    for(let i=0; i<4; i++) key += chars[Math.floor(Math.random()*chars.length)];
+    return key;
 }
 
-function createKey(){
-  const uid = document.getElementById("uid").value.trim();
-  if(!uid) return alert("กรอก UserId");
-
-  db.ref("users/"+uid).once("value").then(snap=>{
-    if(snap.exists() && Date.now() < snap.val().expire){
-      document.getElementById("btn").disabled = true;
-      document.getElementById("out").textContent =
-        "คุณมี Key อยู่แล้ว\nKEY: "+snap.val().key+
-        "\nหมดอายุ: "+new Date(snap.val().expire).toLocaleString();
-      return;
-    }
-
-    const key = genKey();
-    const expire = Date.now() + 12*60*60*1000;
-
-    db.ref("users/"+uid).set({ key, expire });
-    db.ref("keys/"+key).set({ uid, expire });
-
-    document.getElementById("btn").disabled = true;
-    document.getElementById("out").textContent =
-      "KEY: "+key+
-      "\nหมดอายุ: "+new Date(expire).toLocaleString();
-  });
+function createKey() {
+    const key = generateKey();
+    const now = Date.now();
+    const expire = now + 12*60*60*1000; // 12 ชั่วโมง
+    // บันทึกลง Firebase
+    db.ref("keys/" + key).set({
+        created: now,
+        expire: expire,
+        device: ""
+    }).then(() => {
+        document.getElementById("key").innerText = "Key: " + key + "\nหมดอายุ: 12 ชั่วโมง";
+    }).catch(err => {
+        document.getElementById("key").innerText = "เกิดข้อผิดพลาด: " + err;
+    });
 }
 </script>
-
 </body>
 </html>
