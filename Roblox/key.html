@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>BlackpopHub | Key System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:sans-serif;background:#0e0e0e;color:white;padding:20px}
+.box{max-width:420px;margin:auto;background:#161616;padding:20px;border-radius:10px;margin-bottom:20px}
+h2{text-align:center}
+input,button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:6px;font-size:16px}
+input{background:#222;color:white}
+button{background:#00b3ff;color:black;font-weight:bold;cursor:pointer}
+.result{text-align:center;margin-top:10px}
+.success{color:#00ff9d}
+.error{color:#ff4d4d}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>🔑 สร้างคีย์ (24 ชม.)</h2>
+<button onclick="generateKey()">สร้างคีย์</button>
+<div id="gen" class="result"></div>
+</div>
+
+<div class="box">
+<h2>🔐 Login ด้วยคีย์</h2>
+<input id="keyInput" placeholder="ใส่คีย์">
+<button onclick="login()">เข้าสู่ระบบ</button>
+<div id="login" class="result"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+ apiKey: "AIzaSyA4nwk8ZPeVvoLOR4UyPLP-yVUyhlinEN8",
+ authDomain: "blackpophun.firebaseapp.com",
+ databaseURL: "https://blackpophun-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId: "blackpophun",
+ storageBucket: "blackpophun.appspot.com",
+ messagingSenderId: "735578888290",
+ appId: "1:735578888290:web:b68c60a5bdba76880ed93b"
+});
+const db = firebase.database();
+const DAY = 86400000;
+
+/* ===== CREATE KEY ===== */
+function generateKey(){
+ const key = makeKey();
+ const now = Date.now();
+ db.ref("keys/"+key).set({
+   createdAt: now,
+   expiresAt: now + DAY
+ });
+ gen.innerHTML = `<span class="success">${key}</span>`;
+}
+
+/* ===== LOGIN WEB ===== */
+function login(){
+ const key = keyInput.value.trim();
+ if(!key) return;
+
+ db.ref("keys/"+key).get().then(s=>{
+   if(!s.exists()) return show("login","คีย์ไม่ถูกต้อง","error");
+   if(Date.now()>s.val().expiresAt)
+     return show("login","คีย์หมดอายุ","error");
+
+   localStorage.setItem("login_key",key);
+   show("login","สำเร็จ","success");
+   setTimeout(()=>location.href="dashboard.html",800);
+ });
+}
+
+/* ===== API MODE (ROBLOX) ===== */
+const apiKey = new URLSearchParams(location.search).get("key");
+if(apiKey){
+ fetch("https://api.ipify.org?format=json")
+ .then(r=>r.json())
+ .then(ip=>{
+  db.ref("keys/"+apiKey).get().then(s=>{
+   if(!s.exists()) return out("INVALID");
+   const d=s.val();
+   if(Date.now()>d.expiresAt) return out("EXPIRED");
+
+   if(!d.ip){
+     db.ref("keys/"+apiKey).update({ip:ip.ip});
+     return out("SUCCESS");
+   }
+   if(d.ip!==ip.ip) return out("IP_MISMATCH");
+   out("SUCCESS");
+  });
+ });
+}
+
+function out(t){document.body.innerText=t}
+function makeKey(){
+ return "BP-"+Math.random().toString(36).substring(2,6).toUpperCase()
+ +"-"+Math.random().toString(36).substring(2,6).toUpperCase();
+}
+function show(id,msg,type){
+ document.getElementById(id).innerHTML=
+ `<span class="${type}">${msg}</span>`;
+}
+</script>
+</body>
+</html>
