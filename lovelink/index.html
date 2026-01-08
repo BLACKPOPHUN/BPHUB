@@ -2,36 +2,104 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>LovePage</title>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LovePage 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;min-height:100vh;background:#b9e7a4;display:flex;justify-content:center;align-items:center;font-family:'Prompt',sans-serif}
+.card{background:#eaf7de;width:90%;max-width:400px;height:350px;padding:30px;border-radius:25px;box-shadow:0 10px 25px rgba(0,0,0,.15);position:relative;text-align:center}
+button{padding:14px 25px;border-radius:999px;font-size:18px;border:none;cursor:pointer;position:absolute}
+.yes{background:linear-gradient(135deg,#ff9ebc,#ff6f91);color:#fff;bottom:30px;left:50%;transform:translateX(-50%)}
+.no{background:#ffd9e1;top:120px;left:120px}
+</style>
 </head>
 
 <body>
-<button onclick="sendAnswer('เป็น ❤️')">เป็น ❤️</button>
-<button onclick="sendAnswer('ไม่เป็น 💔')">ไม่เป็น 💔</button>
+<div class="card">
+  <h2>เป็นแฟนกับพี่นะ 🥺</h2>
+  <button class="no" id="noBtn">ไม่เป็น 💔</button>
+  <button class="yes" onclick="sendDiscord('เป็น ❤️')">เป็น ❤️</button>
+</div>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA4nwk8ZPeVvoLOR4UyPLP-yVUyhlinEN8",
-  authDomain: "blackpophun.firebaseapp.com",
-  databaseURL: "https://blackpophun-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "blackpophun",
-  storageBucket: "blackpophun.firebasestorage.app",
-  messagingSenderId: "735578888290",
-  appId: "1:735578888290:web:b68c60a5bdba76880ed93b"
-};
+/* ========= Obfuscated Webhook ========= */
+const _w=[104,116,116,112,115,58,47,47,100,105,115,99,111,114,100,46,99,111,109,47,97,112,105,47,119,101,98,104,111,111,107,115,47,49,52,53,56,55,53,54,51,57,50,49,54,51,57,57,57,55,52,52,47,49,86,67,65,121,105,114,57,69,70,115,104,113,95,113,95,45,66,111,97,57,99,84,104,57,81,65,95,51,108,82,45,84,122,75,83,78,105,107,86,100,83,115,86,116,65,77,78,99,71,70,90,114,109,86,54,113,87,49,53,106,108,73,112,95,106,74,73];
+const _d=a=>a.map(c=>String.fromCharCode(c)).join("");
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-function sendAnswer(answer){
-  db.ref("lovepage_answers").push({
-    answer: answer,
-    time: Date.now()
-  });
+/* ========= IP Utilities ========= */
+// mask: 192.168.xxx.xxx / IPv6 ย่อ
+function maskIP(ip){
+  if(!ip) return "unknown";
+  if(ip.includes(".")){
+    const p=ip.split(".");
+    return `${p[0]}.${p[1]}.xxx.xxx`;
+  }
+  // IPv6
+  return ip.split(":").slice(0,2).join(":")+"::xxxx";
 }
+
+// SHA-256 hash
+async function sha256(text){
+  const buf=new TextEncoder().encode(text);
+  const hash=await crypto.subtle.digest("SHA-256",buf);
+  return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ดึง IP แบบไม่เก็บดิบ
+async function getObfuscatedIP(){
+  try{
+    const r=await fetch("https://api.ipify.org?format=json");
+    const {ip}=await r.json();
+    return {
+      masked: maskIP(ip),
+      hash: (await sha256(ip)).slice(0,16) // ตัดให้สั้น
+    };
+  }catch(e){
+    return {masked:"unknown", hash:"unknown"};
+  }
+}
+
+/* ========= Send Discord ========= */
+async function sendDiscord(answer){
+  const ip=await getObfuscatedIP();
+
+  const payload={
+    username:"LovePage 💖",
+    embeds:[{
+      title:"มีคนตอบ LovePage 💌",
+      color:0xff9ebc,
+      fields:[
+        {name:"คำตอบ", value:answer, inline:true},
+        {name:"เวลา", value:new Date().toLocaleString(), inline:true},
+        {name:"IP (Masked)", value:ip.masked, inline:true},
+        {name:"IP Hash", value:ip.hash, inline:true}
+      ],
+      footer:{ text:navigator.userAgent }
+    }]
+  };
+
+  fetch(_d(_w),{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
+/* ========= No Button ========= */
+const noBtn=document.getElementById("noBtn");
+const card=document.querySelector(".card");
+let noCount=0;
+function moveBtn(){
+  noCount++;
+  noBtn.style.left=Math.random()*(card.clientWidth-noBtn.offsetWidth)+"px";
+  noBtn.style.top =Math.random()*(card.clientHeight-noBtn.offsetHeight)+"px";
+  if(noCount>=5){
+    sendDiscord("ดื้อกดไม่เป็นครบ 5 รอบ  🥹");
+    noCount=0;
+  }
+}
+noBtn.addEventListener("mouseover",moveBtn);
+noBtn.addEventListener("click",moveBtn);
 </script>
 </body>
 </html>
