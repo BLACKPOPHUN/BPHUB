@@ -62,7 +62,6 @@ button{
 </div>
 
 <script>
-/* ===== Firebase Config ===== */
 const firebaseConfig = {
   apiKey: "AIzaSyA4nwk8ZPeVvoLOR4UyPLP-yVUyhlinEN8",
   authDomain: "blackpophun.firebaseapp.com",
@@ -75,17 +74,16 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 const db = firebase.database();
 
-/* ===== init config (ไม่สร้างซ้ำ) ===== */
+/* สร้าง config ครั้งเดียว */
 db.ref("config/discord").once("value").then(snap=>{
   if(!snap.exists()){
     db.ref("config/discord").set({ enabled:true });
   }
 });
 
-/* ===== ส่งคำตอบ ===== */
+/* ส่งคำตอบ */
 function sendAnswer(answer){
   db.ref("lovepage_answers").push({
     answer: answer,
@@ -93,10 +91,10 @@ function sendAnswer(answer){
   });
 }
 
-/* ===== ปุ่มไม่เป็นหนี + ดื้อ ===== */
+/* ปุ่มไม่เป็นหนี + ดื้อ */
+let count = 0;
 const noBtn = document.getElementById("noBtn");
 const card = document.querySelector(".card");
-let count = 0;
 
 function moveBtn(){
   count++;
@@ -113,6 +111,6 @@ function moveBtn(){
 
 noBtn.addEventListener("mouseover", moveBtn);
 noBtn.addEventListener("click", moveBtn);
-</script>
+</script
 </body>
 </html>
