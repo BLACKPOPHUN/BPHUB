@@ -11,26 +11,23 @@ exports.sendToDiscord = functions.database
 
     const data = snap.val();
 
-    const hookSnap = await admin.database()
+    const webhookSnap = await admin.database()
       .ref("config/discord/webhook")
       .once("value");
 
-    if (!hookSnap.exists()) return null;
+    if (!webhookSnap.exists()) {
+      console.log("❌ ไม่มี webhook ใน database");
+      return null;
+    }
 
-    const webhook = hookSnap.val();
-    const stubborn = data.answer.includes("ดื้อ");
+    const webhook = webhookSnap.val();
 
     await fetch(webhook, {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({
-        username:"LovePage 💖",
-        embeds:[{
-          title:"มีคนตอบ LovePage",
-          description:data.answer,
-          color: stubborn ? 0xff4d6d : 0xff9edb,
-          footer:{ text:new Date(data.time).toLocaleString("th-TH") }
-        }]
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: "LovePage 💖",
+        content: `มีคนตอบ: ${data.answer}`
       })
     });
 
