@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeFire Panel - ดาวน์โหลด</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a0a0f 50%, #000000 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 64, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(0, 200, 255, 0.1) 0%, transparent 50%);
+            animation: gradientShift 10s ease infinite;
+            background-size: 200% 200%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 0, 64, 0.5);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #ff4477;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #cccccc;
+            margin-bottom: 50px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, rgba(18, 0, 0, 0.9), rgba(40, 0, 10, 0.9));
+            border: 2px solid rgba(255, 0, 64, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: slideUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .download-card:nth-child(1) { animation-delay: 0.1s; }
+        .download-card:nth-child(2) { animation-delay: 0.2s; }
+        .download-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .download-card:hover {
+            border-color: rgba(255, 0, 64, 0.8);
+            box-shadow: 0 0 30px rgba(255, 0, 64, 0.4), inset 0 0 20px rgba(255, 0, 64, 0.1);
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .card-title {
+            font-size: 22px;
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #999999;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff0040, #cc0033);
+            color: #ffffff;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(255, 0, 64, 0.4);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover {
+            box-shadow: 0 12px 35px rgba(255, 0, 64, 0.6);
+            transform: scale(1.05);
+        }
+
+        .download-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .features-title {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 0, 64, 0.05);
+            border-left: 3px solid #ff0040;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 0, 64, 0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            min-width: 30px;
+        }
+
+        .feature-text {
+            color: #cccccc;
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+            font-size: 14px;
+        }
+
+        .version-info {
+            display: inline-block;
+            background: rgba(255, 0, 64, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #ff4477;
+            font-weight: 600;
+            margin-top: 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .downloads-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 60px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            z-index: 1000;
+            text-align: center;
+            border: 2px solid rgba(255, 0, 64, 0.5);
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 0, 64, 0.2);
+            border-top: 4px solid #ff0040;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🎮</div>
+            <h1>FREEFIRE PANEL</h1>
+            <div class="subtitle">Ultimate Gaming System</div>
+            <p class="description">
+                เลือกเวอร์ชันที่ต้องการดาวน์โหลด แอปพลิเคชัน FreeFire Panel พร้อมฟีเจอร์ครบครัน
+            </p>
+        </div>
+
+        <div class="downloads-grid">
+            <!-- Web App Card -->
+            <div class="download-card">
+                <div class="card-icon">🌐</div>
+                <div class="card-title">Web App</div>
+                <div class="card-description">
+                    ใช้งานบนเบราว์เซอร์ทันที ไม่ต้องติดตั้ง
+                </div>
+                <button class="download-btn" onclick="downloadWebApp()">
+                    ↓ ดาวน์โหลด
+                </button>
+            </div>
+
+            <!-- React Native App Card -->
+            <div class="download-card">
+                <div class="card-icon">📱</div>
+                <div class="card-title">React Native</div>
+                <div class="card-description">
+                    โค้ดสำหรับสร้าง APK บนเครื่องของคุณ
+                </div>
+                <button class="download-btn" onclick="downloadReactNative()">
+                    ↓ ดาวน์โหลด
+                </button>
+            </div>
+
+            <!-- Documentation Card -->
+            <div class="download-card">
+                <div class="card-icon">📖</div>
+                <div class="card-title">Documentation</div>
+                <div class="card-description">
+                    คู่มือการติดตั้งและการใช้งาน
+                </div>
+                <button class="download-btn" onclick="downloadDocumentation()">
+                    ↓ ดาวน์โหลด
+                </button>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="features-title">✨ ฟีเจอร์ที่รวมอยู่</div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <span class="feature-text">ปุ่มควบคุมหลายหมวดหมู่</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    <span class="feature-text">แถบความคืบหน้าแบบเรียลไทม์</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚙️</span>
+                    <span class="feature-text">การตั้งค่าขั้นสูง</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🌙</span>
+                    <span class="feature-text">ดีไซน์ Dark Mode</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span class="feature-text">ประสิทธิภาพสูง</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔔</span>
+                    <span class="feature-text">Notification System</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>FreeFire Panel v1.0 Ultimate</p>
+            <div class="version-info">VERSION 1.0 ULTIMATE</div>
+            <p style="margin-top: 20px;">© 2026 FreeFire Panel. All rights reserved.</p>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">กำลังเตรียมดาวน์โหลด...</div>
+    </div>
+
+    <script>
+        function showLoading(text) {
+            const loading = document.getElementById('loading');
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = text;
+            loading.classList.add('show');
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            loading.classList.remove('show');
+        }
+
+        function downloadWebApp() {
+            showLoading('กำลังเตรียมดาวน์โหลด Web App...');
+            
+            // Simulate download delay
+            setTimeout(() => {
+                // Create a link to the web app
+                const link = document.createElement('a');
+                link.href = 'https://3000-ikw2muuphiyikzy8qwt51-8a8b9a9b.sg1.manus.computer';
+                link.target = '_blank';
+                link.click();
+                hideLoading();
+                showNotification('✓ Web App พร้อมใช้งาน!');
+            }, 1500);
+        }
+
+        function downloadReactNative() {
+            showLoading('กำลังเตรียมดาวน์โหลด React Native...');
+            
+            // Simulate download delay
+            setTimeout(() => {
+                // Create a link to download the ZIP file
+                const link = document.createElement('a');
+                link.href = 'freefire-panel-rn-complete.zip';
+                link.download = 'freefire-panel-rn-complete.zip';
+                link.click();
+                hideLoading();
+                showNotification('✓ ดาวน์โหลด React Native สำเร็จ!');
+            }, 1500);
+        }
+
+        function downloadDocumentation() {
+            showLoading('กำลังเตรียมดาวน์โหลด Documentation...');
+            
+            // Simulate download delay
+            setTimeout(() => {
+                // Create a link to download the documentation
+                const link = document.createElement('a');
+                link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(getDocumentation());
+                link.download = 'FreeFire-Panel-Documentation.txt';
+                link.click();
+                hideLoading();
+                showNotification('✓ ดาวน์โหลด Documentation สำเร็จ!');
+            }, 1500);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, rgba(0, 255, 136, 0.95), rgba(0, 204, 68, 0.95));
+                color: #000;
+                padding: 15px 25px;
+                border-radius: 12px;
+                font-weight: 700;
+                font-size: 14px;
+                box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+                z-index: 999;
+                animation: slideInRight 0.5s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        function getDocumentation() {
+            return `
+FreeFire Panel - Documentation
+================================
+
+VERSION: 1.0 Ultimate
+DATE: January 2026
+
+1. WEB APP
+----------
+- URL: https://3000-ikw2muuphiyikzy8qwt51-8a8b9a9b.sg1.manus.computer
+- Platform: Web Browser
+- Installation: None required
+- Features: Full functionality, responsive design
+
+2. REACT NATIVE APP
+-------------------
+- Type: Mobile Application (iOS/Android)
+- Build Tool: Expo + EAS Build
+- Installation: Follow SETUP_GUIDE.md
+
+3. FEATURES
+-----------
+✓ Multiple control buttons (Basic, Pro, Ultimate)
+✓ Real-time progress bars
+✓ Advanced settings with sliders
+✓ Dark mode design
+✓ Global status indicator
+✓ Real-time clock display
+✓ Notification system
+✓ Animated particles background
+
+4. SYSTEM REQUIREMENTS
+----------------------
+For Web App:
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Internet connection
+
+For React Native:
+- Node.js v16+
+- Expo CLI
+- EAS CLI
+- Expo Account (free)
+
+5. INSTALLATION STEPS (React Native)
+------------------------------------
+1. Extract freefire-panel-rn-complete.zip
+2. Open terminal/command prompt
+3. cd freefire-panel-rn
+4. npm install
+5. eas login
+6. eas build --platform android
+7. Download APK from the link provided
+8. Install on Android device
+
+6. TROUBLESHOOTING
+------------------
+Issue: eas: command not found
+Solution: npm install -g eas-cli
+
+Issue: No credentials found
+Solution: eas logout && eas login
+
+Issue: Build failed
+Solution: rm -rf node_modules && npm install
+
+7. SUPPORT
+----------
+- Expo Documentation: https://docs.expo.dev/
+- EAS Build: https://docs.expo.dev/build/introduction/
+- React Native: https://reactnative.dev/
+
+8. LICENSE
+----------
+MIT License - Free to use and modify
+
+================================
+Thank you for using FreeFire Panel!
+            `;
+        }
+
+        // Add CSS animation for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(400px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(400px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
