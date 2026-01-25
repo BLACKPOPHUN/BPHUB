@@ -52,40 +52,32 @@
         .control-group { margin-bottom: 20px; position: relative; }
         label { color: var(--neon-cyan); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; display: block; }
         
-        input, textarea {
-            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; padding: 12px; border-radius: 8px; font-family: 'Rajdhani'; font-size: 1.1rem;
-            transition: all 0.3s;
-        }
-        input:focus, textarea:focus {
-            border-color: var(--neon-cyan); outline: none; box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
-            background: rgba(0, 255, 242, 0.05);
-        }
+        /* 1. ล็อคขนาดของแถว (Row) ไม่ให้บวม */
+.row { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+    min-width: 0; /* สำคัญมาก: ป้องกัน Grid Item ขยายตามเนื้อหาข้างใน */
+    width: 100%;
+}
 
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+/* 2. ล็อคขนาดของกลุ่มควบคุม ไม่ให้กว้างเกินกล่องแม่ */
+.control-group { 
+    min-width: 0; 
+    width: 100%;
+    overflow: hidden; /* ถ้ามีอะไรแลบออกมาให้ซ่อนไว้ */
+}
 
-        .btn {
-            padding: 15px; border: none; border-radius: 8px; cursor: pointer;
-            font-family: 'Orbitron'; font-weight: 700; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-transmit {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            color: #fff; width: 100%; font-size: 1.2rem; margin-top: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 242, 0.4);
-        }
-        .btn-transmit:hover { transform: scale(1.02); box-shadow: 0 0 40px var(--neon-cyan); }
-        
-        .btn-add { background: transparent; border: 1px dashed var(--neon-cyan); color: var(--neon-cyan); margin-top: 10px; width: 100%; }
-        .btn-add:hover { background: rgba(0, 255, 242, 0.1); }
+/* 3. ล็อคตัวช่องกรอก (Input) ให้แสดงจุดไข่ปลาถ้าลิงก์ยาวเกิน */
+input[type="text"], input[type="url"] {
+    width: 100% !important; 
+    box-sizing: border-box;
+    text-overflow: ellipsis; /* ใส่ ... ถ้าข้อความยาวเกินช่อง */
+    white-space: nowrap;     /* ห้ามขึ้นบรรทัดใหม่ */
+    overflow: hidden;        /* ซ่อนส่วนที่ล้น */
+    display: block;
+}
 
-        /* --- REAL-TIME PREVIEW (HOLOGRAPHIC) --- */
-        .preview-sticky { position: sticky; top: 20px; }
-        .hologram-monitor {
-            background: var(--discord-dark); border-radius: 12px; padding: 20px;
-            border: 1px solid rgba(255,255,255,0.05); position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-        }
         .hologram-monitor::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
