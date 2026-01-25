@@ -3,203 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEBULA UI: PRO EDITION (ULTIMATE FIX)</title>
+    <title>Webhook by MydaThailand2003</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-cyan: #00fff2;
-            --neon-pink: #ff00d4;
-            --glass-bg: rgba(10, 15, 30, 0.85);
+            --glass-bg: rgba(8, 10, 20, 0.95);
             --discord-dark: #313338;
+            --rainbow-grad: linear-gradient(45deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00d4, #ff0000);
         }
 
-        * { box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--neon-cyan) transparent; }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 10px; }
+        @keyframes infinite-rgb {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            50% { filter: hue-rotate(180deg) brightness(1.3); }
+            100% { filter: hue-rotate(360deg) brightness(1); }
+        }
 
+        * { box-sizing: border-box; transition: transform 0.2s ease; }
         body {
             margin: 0; padding: 20px; font-family: 'Rajdhani', sans-serif;
             background: #000; color: #fff; overflow-x: hidden;
-            min-height: 100vh; display: flex; justify-content: center;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; }
-
-        /* --- LAYOUT STRUCTURE (FIXED) --- */
-        .main-layout {
-            display: grid; 
-            grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); 
-            gap: 30px;
-            width: 100%; max-width: 1500px; z-index: 1;
-        }
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%; opacity: 0.5; }
+        .container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; z-index: 1; }
 
         .glass-card {
-            background: var(--glass-bg); backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 255, 242, 0.2); border-radius: 20px;
-            padding: 25px; box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            max-height: 95vh; overflow-y: auto; min-width: 0;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 3px solid transparent; border-radius: 20px; padding: 30px;
+            border-image: var(--rainbow-grad);
+            border-image-slice: 1;
+            animation: infinite-rgb 5s linear infinite;
+            box-shadow: 0 0 20px rgba(0,0,0,1);
         }
 
-        h1, h2 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; margin: 0; }
-        .glitch-title {
-            font-size: 1.8rem; background: linear-gradient(to right, var(--neon-cyan), #fff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 25px;
+        h1 { 
+            font-family: 'Orbitron'; font-size: 2.2rem; text-align: center; margin-bottom: 20px; 
+            background: var(--rainbow-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: infinite-rgb 4s linear infinite;
         }
 
-        /* --- INPUT & GRID PROTECTION --- */
-        .row { 
-            display: grid; 
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); 
-            gap: 15px; 
-            width: 100%;
+        .discord-link-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; padding: 12px; margin-bottom: 25px;
+            background: #5865f2; color: #fff; text-decoration: none;
+            font-family: 'Orbitron'; font-weight: 700; border-radius: 5px;
+            border: 2px solid transparent; border-image: var(--rainbow-grad); border-image-slice: 1;
+            animation: infinite-rgb 3s linear infinite;
+            gap: 10px; font-size: 1rem;
         }
+        .discord-link-btn:hover { transform: scale(1.03); filter: brightness(1.2); }
 
-        .control-group { margin-bottom: 20px; min-width: 0; }
-        label { color: var(--neon-cyan); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+        .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 15px; margin-bottom: 15px; }
+        .control-group { margin-bottom: 12px; }
+        label { color: #fff; font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
         
         input, textarea {
-            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; padding: 12px; border-radius: 8px; font-family: 'Rajdhani'; font-size: 1.1rem;
-            transition: all 0.3s;
+            width: 100%; background: rgba(0,0,0,0.8); 
+            color: #fff; padding: 12px; border-radius: 0; 
+            font-family: 'Rajdhani'; font-size: 1rem;
+            border: 2px solid transparent; border-image: var(--rainbow-grad); border-image-slice: 1;
+            animation: infinite-rgb 8s linear infinite; outline: none;
         }
+        input:focus, textarea:focus { background: rgba(20, 25, 40, 0.9); box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
 
-        /* ล็อคลิงก์ยาวไม่ให้ดัน UI */
-        input[type="text"] {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .rgb-btn {
+            background: #050505; color: #fff;
+            border: 2.5px solid transparent; border-image: var(--rainbow-grad); border-image-slice: 1;
+            font-family: 'Orbitron'; font-weight: 700; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
+            animation: infinite-rgb 3s linear infinite;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .rgb-btn:hover { transform: scale(1.02); filter: brightness(1.5); }
 
-        input:focus, textarea:focus { border-color: var(--neon-cyan); outline: none; background: rgba(0, 255, 242, 0.05); }
+        .btn-send { width: 100%; padding: 20px; font-size: 1.4rem; margin-top: 20px; }
+        .btn-add { width: 100%; padding: 12px; margin-bottom: 15px; }
+        .btn-remove { padding: 6px 15px; font-size: 0.75rem; border-width: 1.5px; animation-duration: 2s; }
 
-        /* --- BUTTONS --- */
-        .btn {
-            padding: 15px; border: none; border-radius: 8px; cursor: pointer;
-            font-family: 'Orbitron'; font-weight: 700; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-transmit {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            color: #fff; width: 100%; font-size: 1.2rem; margin-top: 20px;
-        }
-        .btn-add { background: transparent; border: 1px dashed var(--neon-cyan); color: var(--neon-cyan); margin-top: 10px; width: 100%; }
+        .hologram { background: var(--discord-dark); border-radius: 12px; padding: 25px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .d-embed { margin-top: 10px; background: #2b2d31; border-left: 4px solid #00fff2; padding: 16px; border-radius: 4px; display: grid; gap: 10px; position: relative; }
 
-        /* --- DISCORD PREVIEW (FIXED) --- */
-        .preview-sticky { position: sticky; top: 0; min-width: 0; }
-        .hologram-monitor {
-            background: var(--discord-dark); border-radius: 12px; padding: 20px;
-            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-        }
-
-        .d-msg { display: flex; gap: 15px; min-width: 0; }
-        .d-avatar { width: 45px; height: 45px; border-radius: 50%; flex-shrink: 0; }
-        .d-username { font-weight: 600; color: #fff; }
-        .d-bot { background: #5865f2; color: #fff; font-size: 0.65rem; padding: 2px 5px; border-radius: 4px; margin-left: 5px; }
-        .d-text { color: #dbdee1; margin-top: 5px; white-space: pre-wrap; word-wrap: break-word; }
-
-        .d-embed {
-            margin-top: 10px; background: #2b2d31; border-left: 4px solid #000;
-            padding: 15px; border-radius: 4px; max-width: 520px; display: grid; gap: 8px;
-        }
-        .d-author { display: flex; align-items: center; gap: 8px; font-weight: 600; color: #fff; }
-        .d-author img { width: 22px; height: 22px; border-radius: 50%; }
-        .d-title { color: #00a8fc; font-weight: 700; text-decoration: none; }
-        .d-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .d-img { width: 100%; border-radius: 5px; margin-top: 10px; }
-        .d-thumb { width: 80px; height: 80px; border-radius: 5px; float: right; }
-        .d-footer { display: flex; align-items: center; gap: 8px; color: #949ba4; font-size: 0.8rem; margin-top: 10px; }
-
-        .field-input-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.1); min-width: 0; }
-
-        @media (max-width: 1100px) { .main-layout { grid-template-columns: 1fr; } .preview-sticky { position: static; } }
+        @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <canvas id="bg-canvas"></canvas>
 
-<div class="main-layout">
+<div class="container">
     <div class="glass-card">
-        <h1 class="glitch-title"><i class="fas fa-microchip"></i> NEBULA PRO ENGINE</h1>
+        <h1>WEBHOOK<br>by MydaThailand2003</h1>
+        
+        <a href="https://discord.gg/ep7ghypP5N" target="_blank" class="discord-link-btn">
+            <i class="fab fa-discord"></i> JOIN OUR DISCORD SERVER
+        </a>
         
         <div class="control-group">
-            <label>TARGET WEBHOOK URL</label>
-            <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/...">
+            <label><i class="fas fa-terminal"></i> WEBHOOK ENDPOINT</label>
+            <input type="text" id="wUrl" placeholder="https://discord.com/api/webhooks/...">
         </div>
 
         <div class="row">
-            <div class="control-group"><label>BOT NAME</label><input type="text" id="botName" value="Nebula Bot"></div>
-            <div class="control-group"><label>AVATAR URL</label><input type="text" id="botAvatar"></div>
+            <div class="control-group"><label>SENDER NAME</label><input type="text" id="wName" value="MydaThailand"></div>
+            <div class="control-group"><label>SENDER AVATAR</label><input type="text" id="wAv" placeholder="https://..."></div>
         </div>
 
-        <div class="control-group">
-            <label>MAIN CONTENT (MARKDOWN)</label>
-            <textarea id="mainContent" rows="2"></textarea>
-        </div>
-
-        <h2 style="font-size: 1rem; color: var(--neon-pink); margin-bottom: 15px;">EMBED CONFIG</h2>
-        
-        <div class="row">
-            <div class="control-group"><label>AUTHOR NAME</label><input type="text" id="authName"></div>
-            <div class="control-group"><label>AUTHOR ICON</label><input type="text" id="authIcon"></div>
-        </div>
+        <div class="control-group"><label>MESSAGE</label><textarea id="wMsg" rows="2"></textarea></div>
 
         <div class="row">
-            <div class="control-group"><label>EMBED TITLE</label><input type="text" id="eTitle"></div>
-            <div class="control-group"><label>TITLE URL</label><input type="text" id="eUrl"></div>
-        </div>
-
-        <div class="control-group"><label>DESCRIPTION</label><textarea id="eDesc" rows="3"></textarea></div>
-
-        <div class="row">
+            <div class="control-group"><label>EMBED TITLE</label><input type="text" id="eT"></div>
             <div class="control-group">
-                <label>ACCENT COLOR</label>
-                <input type="color" id="eColor" value="#00fff2" style="height:45px; padding:2px;">
-            </div>
-            <div class="control-group">
-                <label>TIMESTAMP</label>
-                <input type="checkbox" id="eTime" checked style="width:30px; height:30px;">
+                <label>ACCENT & TIMESTAMP</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="color" id="eC" value="#00fff2" style="height:48px; width:70px; cursor:pointer;">
+                    <label style="cursor:pointer;"><input type="checkbox" id="eTs" checked> ENABLE</label>
+                </div>
             </div>
         </div>
 
-        <div class="control-group">
-            <label>DYNAMIC FIELDS</label>
-            <div id="fieldsContainer"></div>
-            <button class="btn btn-add" onclick="addField()"><i class="fas fa-plus"></i> ADD DATA FIELD</button>
+        <div class="control-group"><label>DESCRIPTION</label><textarea id="eD" rows="3"></textarea></div>
+
+        <div id="fieldsList"></div>
+        <button class="rgb-btn btn-add" onclick="addField()">+ ADD FIELD SLOT</button>
+
+        <div class="row">
+            <div class="control-group"><label>THUMBNAIL URL</label><input type="text" id="eTh"></div>
+            <div class="control-group"><label>MAIN IMAGE URL</label><input type="text" id="eIm"></div>
         </div>
 
         <div class="row">
-            <div class="control-group"><label>THUMBNAIL URL</label><input type="text" id="eThumb"></div>
-            <div class="control-group"><label>MAIN IMAGE URL</label><input type="text" id="eImg"></div>
+            <div class="control-group"><label>FOOTER TEXT</label><input type="text" id="eFt"></div>
+            <div class="control-group"><label>FOOTER ICON</label><input type="text" id="eFi"></div>
         </div>
 
-        <div class="row">
-            <div class="control-group"><label>FOOTER TEXT</label><input type="text" id="fText"></div>
-            <div class="control-group"><label>FOOTER ICON</label><input type="text" id="fIcon"></div>
-        </div>
-
-        <button class="btn btn-transmit" onclick="transmit()"><i class="fas fa-satellite-dish"></i> ENGAGE TRANSMISSION</button>
+        <button class="rgb-btn btn-send" onclick="transmit()">
+            <i class="fas fa-sync-alt fa-spin"></i> TRANSMIT DATA NOW
+        </button>
     </div>
 
-    <div class="preview-sticky">
-        <h2 style="font-size: 1rem; margin-bottom: 15px; color: var(--neon-cyan);">HOLOGRAPHIC FEED</h2>
-        <div class="hologram-monitor">
-            <div class="d-msg">
-                <img id="pAvatar" class="d-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png">
-                <div style="flex:1; min-width:0;">
-                    <div class="d-username" id="pBotName">Nebula Bot<span class="d-bot">BOT</span></div>
-                    <div class="d-text" id="pContent"></div>
+    <div class="container" style="margin-top:30px;">
+        <p style="text-align:center; font-family:'Orbitron'; font-weight:700; color: #555; letter-spacing:3px;">LIVE FEED PREVIEW</p>
+        <div class="hologram">
+            <div style="display: flex; gap: 15px;">
+                <img id="pAv" style="width: 50px; height: 50px; border-radius: 50%;" src="https://cdn.discordapp.com/embed/avatars/0.png">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight:600;"><span id="pName">Nebula Infinite</span> <span style="background:#5865f2; font-size:0.65rem; padding:2px 6px; border-radius:3px; margin-left:5px;">BOT</span></div>
+                    <div id="pMsg" style="margin-top:6px; color:#dbdee1; white-space: pre-wrap;"></div>
                     <div id="pEmbed" class="d-embed">
-                        <div id="pAuth" class="d-author" style="display:none"><img id="pAuthIcon" src=""> <span id="pAuthName"></span></div>
-                        <a id="pTitle" class="d-title" target="_blank" style="display:none"></a>
-                        <div id="pDesc" class="d-desc" style="color:#dbdee1; font-size:0.95rem;"></div>
-                        <div id="pFields" class="d-fields"></div>
-                        <img id="pThumb" class="d-thumb" style="display:none">
-                        <img id="pImg" class="d-img" style="display:none">
-                        <div id="pFooter" class="d-footer" style="display:none">
-                            <img id="pFooterIcon" src=""> <span id="pFooterText"></span>
+                        <div id="pT" style="color:#00a8fc; font-weight:700; font-size:1.15rem;"></div>
+                        <div id="pD" style="color:#dbdee1; white-space: pre-wrap;"></div>
+                        <div id="pFs" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;"></div>
+                        <img id="pTh" style="width:80px; height:80px; position:absolute; right:15px; top:15px; border-radius:4px; display:none; object-fit:cover;">
+                        <img id="pIm" style="width:100%; border-radius:4px; margin-top:10px; display:none;">
+                        <div id="pFoot" style="display:none; align-items:center; color:#949ba4; font-size:0.75rem; margin-top:10px;">
+                            <img id="pFi" style="width:18px; height:18px; border-radius:50%; margin-right:8px;"><span id="pFt"></span><span id="pTs" style="margin-left:5px;"></span>
                         </div>
                     </div>
                 </div>
@@ -209,86 +170,95 @@
 </div>
 
 <script>
-    // --- GALAXY ANIMATION ---
-    const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.onresize = resize; resize();
-    for(let i=0; i<400; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2});
-    function anim() {
-        ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#00fff2";
-        stars.forEach(s => { s.y += s.s*0.5; if(s.y>canvas.height) s.y=0; ctx.beginPath(); ctx.arc(s.x, s.y, s.s/2, 0, Math.PI*2); ctx.fill(); });
-        requestAnimationFrame(anim);
-    }
-    anim();
-
-    // --- LOGIC (ทุกอย่างเหมือนเดิม) ---
     let fields = [];
-    function md(t) { return t ? t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>').replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#00a8fc">$1</a>').replace(/\n/g, '<br>') : ""; }
 
     function update() {
-        const get = id => document.getElementById(id).value;
-        const setSrc = (id, src) => { const el = document.getElementById(id); if(src){el.src=src; el.style.display='block';}else el.style.display='none'; }
-        
-        document.getElementById('pBotName').innerText = get('botName') || 'Nebula Bot';
-        setSrc('pAvatar', get('botAvatar') || 'https://cdn.discordapp.com/embed/avatars/0.png');
-        document.getElementById('pContent').innerHTML = md(get('mainContent'));
+        const v = id => document.getElementById(id).value;
+        const setImg = (id, src) => { const el = document.getElementById(id); if(src){ el.src=src; el.style.display='block'; }else el.style.display='none'; };
 
-        const color = document.getElementById('eColor').value;
-        const pEmbed = document.getElementById('pEmbed');
-        pEmbed.style.borderLeftColor = color;
+        document.getElementById('pName').innerText = v('wName') || 'Nebula Infinite';
+        document.getElementById('pAv').src = v('wAv') || 'https://cdn.discordapp.com/embed/avatars/0.png';
+        document.getElementById('pMsg').innerText = v('wMsg');
+        document.getElementById('pEmbed').style.borderLeftColor = document.getElementById('eC').value;
+        document.getElementById('pT').innerText = v('eT');
+        document.getElementById('pD').innerText = v('eD');
 
-        if(get('authName')){ document.getElementById('pAuth').style.display='flex'; document.getElementById('pAuthName').innerText=get('authName'); setSrc('pAuthIcon', get('authIcon')); } else document.getElementById('pAuth').style.display='none';
-        if(get('eTitle')){ const t=document.getElementById('pTitle'); t.innerText=get('eTitle'); t.style.display='block'; t.href=get('eUrl')||'#'; } else document.getElementById('pTitle').style.display='none';
-        
-        document.getElementById('pDesc').innerHTML = md(get('eDesc'));
-        
-        const fCont = document.getElementById('pFields'); fCont.innerHTML = '';
-        fields.forEach(f => { if(f.name && f.val){ const d=document.createElement('div'); d.style.gridColumn = f.inline ? 'span 1' : 'span 3'; d.innerHTML=`<div style="font-weight:700; color:#fff;">${f.name}</div><div style="color:#dbdee1;">${md(f.val)}</div>`; fCont.appendChild(d); } });
+        const fsDiv = document.getElementById('pFs'); fsDiv.innerHTML = '';
+        fields.forEach(f => {
+            const d = document.createElement('div');
+            d.style.gridColumn = f.inline ? 'span 1' : 'span 3';
+            d.innerHTML = `<div style="font-weight:700; color:#fff; font-size:0.9rem;">${f.name || 'Field'}</div><div style="word-break:break-all; color:#dbdee1;">${f.val || 'Value'}</div>`;
+            fsDiv.appendChild(d);
+        });
 
-        setSrc('pThumb', get('eThumb'));
-        setSrc('pImg', get('eImg'));
+        setImg('pTh', v('eTh')); setImg('pIm', v('eIm'));
 
-        if(get('fText')){ document.getElementById('pFooter').style.display='flex'; document.getElementById('pFooterText').innerText=get('fText'); setSrc('pFooterIcon', get('fIcon')); } else document.getElementById('pFooter').style.display='none';
+        if(document.getElementById('eTs').checked) {
+            const now = new Date();
+            document.getElementById('pTs').innerText = ` • วันนี้เวลา ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+        } else document.getElementById('pTs').innerText = '';
+
+        document.getElementById('pFoot').style.display = (v('eFt') || document.getElementById('eTs').checked) ? 'flex' : 'none';
+        document.getElementById('pFt').innerText = v('eFt');
+        const fi = document.getElementById('pFi'); if(v('eFi')){ fi.src=v('eFi'); fi.style.display='block'; }else fi.style.display='none';
     }
 
-    function addField() { const id=Date.now(); fields.push({id, name:'', val:'', inline:true}); renderInputs(); }
-    function removeField(id) { fields=fields.filter(f=>f.id!==id); renderInputs(); update(); }
-    function renderInputs() {
-        const c = document.getElementById('fieldsContainer'); c.innerHTML = '';
+    function addField() { const id = Date.now(); fields.push({id, name: '', val: '', inline: true}); renderFields(); }
+
+    function renderFields() {
+        const c = document.getElementById('fieldsList'); c.innerHTML = '';
         fields.forEach(f => {
-            const d = document.createElement('div'); d.className='field-input-row';
-            d.innerHTML = `<div class="row"><input type="text" placeholder="Name" value="${f.name}" oninput="f.name=this.value;update()"><input type="text" placeholder="Value" value="${f.val}" oninput="f.val=this.value;update()"></div>
-            <div style="display:flex; justify-content:space-between; margin-top:5px;"><label><input type="checkbox" ${f.inline?'checked':''} onchange="f.inline=this.checked;update()"> Inline</label><button onclick="removeField(${f.id})" style="color:red; background:none; border:none; cursor:pointer;">REMOVE</button></div>`;
-            c.appendChild(d);
+            const div = document.createElement('div');
+            div.style.background='rgba(0,0,0,0.4)'; div.style.padding='15px'; div.style.marginBottom='12px';
+            div.innerHTML = `
+                <div class="row">
+                    <input type="text" placeholder="Field Name" value="${f.name}" oninput="fields.find(x=>x.id==${f.id}).name=this.value;update()">
+                    <input type="text" placeholder="Field Value" value="${f.val}" oninput="fields.find(x=>x.id==${f.id}).val=this.value;update()">
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label style="cursor:pointer; font-size:0.7rem;"><input type="checkbox" ${f.inline?'checked':''} onchange="fields.find(x=>x.id==${f.id}).inline=this.checked;update()"> Inline</label>
+                    <button class="rgb-btn btn-remove" onclick="fields=fields.filter(x=>x.id!=${f.id});renderFields();update()">REMOVE</button>
+                </div>`;
+            c.appendChild(div);
         });
+        update();
     }
 
     async function transmit() {
-        const url = document.getElementById('webhookUrl').value;
-        if(!url) return alert('No Webhook URL');
+        const url = document.getElementById('wUrl').value;
+        if(!url) return alert('ใส่ Webhook URL ก่อนครับ!');
         const payload = {
-            username: document.getElementById('botName').value,
-            avatar_url: document.getElementById('botAvatar').value,
-            content: document.getElementById('mainContent').value,
+            username: document.getElementById('wName').value,
+            avatar_url: document.getElementById('wAv').value,
+            content: document.getElementById('wMsg').value,
             embeds: [{
-                title: document.getElementById('eTitle').value,
-                url: document.getElementById('eUrl').value || undefined,
-                description: document.getElementById('eDesc').value,
-                color: parseInt(document.getElementById('eColor').value.replace('#',''), 16),
-                author: document.getElementById('authName').value ? { name: document.getElementById('authName').value, icon_url: document.getElementById('authIcon').value } : undefined,
-                fields: fields.filter(f=>f.name && f.val).map(f=>({name:f.name, value:f.val, inline:f.inline})),
-                image: { url: document.getElementById('eImg').value },
-                thumbnail: { url: document.getElementById('eThumb').value },
-                footer: { text: document.getElementById('fText').value, icon_url: document.getElementById('fIcon').value },
-                timestamp: document.getElementById('eTime').checked ? new Date().toISOString() : undefined
+                title: document.getElementById('eT').value,
+                description: document.getElementById('eD').value,
+                color: parseInt(document.getElementById('eC').value.replace('#',''), 16),
+                fields: fields.map(f=>({name:f.name, value:f.val, inline:f.inline})),
+                image: { url: document.getElementById('eIm').value },
+                thumbnail: { url: document.getElementById('eTh').value },
+                footer: { text: document.getElementById('eFt').value, icon_url: document.getElementById('eFi').value },
+                timestamp: document.getElementById('eTs').checked ? new Date().toISOString() : undefined
             }]
         };
-        const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-        if(res.ok) alert('Sent!'); else alert('Failed!');
+        try {
+            const res = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+            if(res.ok) alert('🚀 ส่งข้อมูลสำเร็จ!'); else alert('❌ ผิดพลาด: ' + res.status);
+        } catch(e) { alert('❌ Fatal Error!'); }
     }
+
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    function resz() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.onresize = resz; resz();
+    let stars = Array(150).fill().map(() => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*0.3}));
+    function draw() {
+        ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "#fff";
+        stars.forEach(s => { s.y += s.s; if(s.y > canvas.height) s.y = 0; ctx.beginPath(); ctx.arc(s.x, s.y, 0.8, 0, Math.PI*2); ctx.fill(); });
+        requestAnimationFrame(draw);
+    }
+    draw();
 
     document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', update));
     update();
