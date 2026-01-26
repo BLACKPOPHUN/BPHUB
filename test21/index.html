@@ -5,20 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</title>
     <style>
-        /* --- แก้ไขตรงนี้ --- */
         body { 
             margin: 0; 
             padding: 0; 
             background: #f0f2f5; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            /* overflow: hidden;  <-- ผมลบบรรทัดนี้ออกไปแล้ว */
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            min-height: 100vh; /* เปลี่ยนเป็น min-height เพื่อให้เนื้อหายาวแล้วเลื่อนได้ */
+            min-height: 100vh;
             color: #333; 
         }
-        .container { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 700px; margin: 20px; /* เพิ่ม margin เผื่อหน้าจอเล็ก */ }
+        /* --- แก้ไขตรงนี้ --- */
+        .container { 
+            text-align: center; 
+            background: #fff; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            max-width: 700px; 
+            margin: 20px;
+            position: relative; /* เพิ่ม position */
+            z-index: 1;      /* กำหนดให้อยู่เลเยอร์ที่ 1 */
+        }
         h1 { font-size: 2.5em; color: #1a237e; }
         p { font-size: 1.2em; color: #555; }
         .main-img { width: 100%; max-width: 600px; border: 5px solid #e0e0e0; border-radius: 10px; cursor: crosshair; margin-top: 20px; }
@@ -36,7 +45,22 @@
             100% { transform: scale(1.25) translate(15px, 15px) rotate(1deg); }
         }
 
-        #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(30, 30, 30, 0.9); color: white; padding: 20px; text-align: center; z-index: 10000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        /* --- แก้ไขตรงนี้ --- */
+        #cookie-banner { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background-color: rgba(30, 30, 30, 0.9); 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+            z-index: 10000; /* กำหนดให้อยู่เลเยอร์ที่ 10000 (สูงที่สุด) */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            backdrop-filter: blur(5px); 
+        }
         #cookie-banner p { margin: 0 20px 0 0; font-size: 1em; }
         #cookie-accept-btn { padding: 12px 25px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
     </style>
@@ -63,6 +87,7 @@
     </div>
 
     <script>
+        // --- ส่วนของ Javascript ไม่มีการเปลี่ยนแปลง ---
         const btn = document.querySelector('.btn' );
         const cookieBanner = document.getElementById('cookie-banner');
         const acceptCookieBtn = document.getElementById('cookie-accept-btn');
@@ -121,10 +146,7 @@
             }, 1000);
 
             setTimeout(() => {
-                // --- แก้ไขตรงนี้ ---
-                // สั่งให้ body กลับไปเลื่อนไม่ได้อีกครั้งก่อนแสดง Jumpscare
                 document.body.style.overflow = 'hidden';
-
                 document.getElementById('jumpscare').style.display = 'block';
                 playSound();
                 const elem = document.documentElement;
