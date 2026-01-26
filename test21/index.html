@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</title>
+    <style>
+        body { margin: 0; padding: 0; background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; color: #333; }
+        .container { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 700px; }
+        h1 { font-size: 2.5em; color: #1a237e; }
+        p { font-size: 1.2em; color: #555; }
+        .main-img { width: 100%; max-width: 600px; border: 5px solid #e0e0e0; border-radius: 10px; cursor: crosshair; margin-top: 20px; }
+        .btn { margin-top: 30px; padding: 20px 60px; font-size: 28px; background: linear-gradient(45deg, #1976d2, #2196f3); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn:disabled { background: #9e9e9e; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        #jumpscare { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; }
+        #jumpscare img { width: 100%; height: 100%; object-fit: cover; animation: intenseShake 0.1s infinite; }
+        @keyframes intenseShake {
+            0% { transform: scale(1.25) translate(15px, 10px) rotate(1deg); }
+            25% { transform: scale(1.25) translate(-10px, -15px) rotate(-1deg); }
+            50% { transform: scale(1.25) translate(10px, -10px) rotate(1deg); }
+            75% { transform: scale(1.25) translate(-15px, 10px) rotate(-1deg); }
+            100% { transform: scale(1.25) translate(15px, 15px) rotate(1deg); }
+        }
+
+        #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(30, 30, 30, 0.9); color: white; padding: 20px; text-align: center; z-index: 10000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        #cookie-banner p { margin: 0 20px 0 0; font-size: 1em; }
+        #cookie-accept-btn { padding: 12px 25px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="ui">
+        <h1>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</h1>
+        <p>ระบบจะทำการสแกนพิกเซลเพื่อหาค่าความผิดปกติในภาพ  
+กรุณาจ้องที่จุดกึ่งกลางภาพแล้วกดปุ่มเพื่อเริ่ม</p>
+        <!-- รูปภาพลวงตา (เปลี่ยนได้) -->
+        <img src="https://images.pexels.com/photos/36717/amazing-animal-beautiful-beautifull.jpg" class="main-img">
+          
+
+        <button class="btn" onclick="startScare( )">เริ่มการวิเคราะห์</button>
+    </div>
+
+    <div id="jumpscare">
+        <!-- รูปภาพ Jumpscare (เปลี่ยนได้) -->
+        <img src="https://i.pinimg.com/originals/5f/20/6a/5f206a34a2912b8ead03f384a788a4a5.jpg">
+    </div>
+
+    <div id="cookie-banner">
+        <p>เว็บไซต์นี้จำเป็นต้องใช้คุกกี้เพื่อประมวลผลข้อมูลภาพ โปรดกดยอมรับเพื่อดำเนินการต่อ</p>
+        <button id="cookie-accept-btn">ยอมรับและดำเนินการต่อ</button>
+    </div>
+
+    <script>
+        const btn = document.querySelector('.btn' );
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookieBtn = document.getElementById('cookie-accept-btn');
+
+        // URL เสียงกรีดร้อง (เปลี่ยนได้)
+        const audioUrl = 'https://www.myinstants.com/media/sounds/woman-scream-6331.mp3';
+        
+        let audioBuffer = null;
+        let audioCtx;
+        let isAudioUnlocked = false;
+
+        async function setupAudio( ) {
+            if (isAudioUnlocked) return;
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const response = await fetch(audioUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                isAudioUnlocked = true;
+                console.log("ปลดล็อกและถอดรหัสเสียงสำเร็จ!");
+            } catch (e) {
+                console.error("เกิดข้อผิดพลาดในการตั้งค่าเสียง:", e);
+                // ไม่แสดง alert แล้ว เพื่อไม่ให้เหยื่อรู้ตัว
+            }
+        }
+
+        acceptCookieBtn.addEventListener('click', async () => {
+            if (audioCtx && audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
+            await setupAudio();
+            cookieBanner.style.display = 'none';
+        }, { once: true });
+
+        function playSound() {
+            if (!audioBuffer || !audioCtx) return;
+
+            // สร้าง GainNode เพื่อควบคุมความดัง
+            const gainNode = audioCtx.createGain();
+            gainNode.gain.value = 3.0; // ตั้งค่าความดัง 3 เท่า (300%)
+
+            const source = audioCtx.createBufferSource();
+            source.buffer = audioBuffer;
+            
+            // ต่อ Source เข้า GainNode และ GainNode เข้าลำโพง
+            source.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            source.start(0);
+        }
+
+        function startScare() {
+            if (!isAudioUnlocked) {
+                alert("เพื่อการประมวลผลที่สมบูรณ์ กรุณากดยอมรับนโยบายที่แถบด้านล่างก่อนครับ");
+                return;
+            }
+
+            btn.innerText = "กำลังประมวลผล... (0%)";
+            btn.disabled = true;
+
+            let percent = 0;
+            const interval = setInterval(() => {
+                percent += 20;
+                btn.innerText = `กำลังประมวลผล... (${percent}%)`;
+                if (percent >= 100) clearInterval(interval);
+            }, 1000);
+
+            setTimeout(() => {
+                document.getElementById('jumpscare').style.display = 'block';
+                playSound();
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                }
+            }, 5500);
+        }
+    </script>
+</body>
+</html>
