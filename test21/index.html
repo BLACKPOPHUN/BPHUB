@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</title>
     <style>
-        body { margin: 0; padding: 0; background: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; color: #333; }
-        .container { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 700px; }
+        /* --- แก้ไขตรงนี้ --- */
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: #f0f2f5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* overflow: hidden;  <-- ผมลบบรรทัดนี้ออกไปแล้ว */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; /* เปลี่ยนเป็น min-height เพื่อให้เนื้อหายาวแล้วเลื่อนได้ */
+            color: #333; 
+        }
+        .container { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 700px; margin: 20px; /* เพิ่ม margin เผื่อหน้าจอเล็ก */ }
         h1 { font-size: 2.5em; color: #1a237e; }
         p { font-size: 1.2em; color: #555; }
         .main-img { width: 100%; max-width: 600px; border: 5px solid #e0e0e0; border-radius: 10px; cursor: crosshair; margin-top: 20px; }
@@ -35,7 +47,6 @@
         <h1>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</h1>
         <p>ระบบจะทำการสแกนพิกเซลเพื่อหาค่าความผิดปกติในภาพ  
 กรุณาจ้องที่จุดกึ่งกลางภาพแล้วกดปุ่มเพื่อเริ่ม</p>
-        <!-- รูปภาพลวงตา (เปลี่ยนได้) -->
         <img src="https://images.pexels.com/photos/36717/amazing-animal-beautiful-beautifull.jpg" class="main-img">
           
 
@@ -43,7 +54,6 @@
     </div>
 
     <div id="jumpscare">
-        <!-- รูปภาพ Jumpscare (เปลี่ยนได้) -->
         <img src="https://i.pinimg.com/originals/5f/20/6a/5f206a34a2912b8ead03f384a788a4a5.jpg">
     </div>
 
@@ -56,8 +66,6 @@
         const btn = document.querySelector('.btn' );
         const cookieBanner = document.getElementById('cookie-banner');
         const acceptCookieBtn = document.getElementById('cookie-accept-btn');
-
-        // URL เสียงกรีดร้อง (เปลี่ยนได้)
         const audioUrl = 'https://www.myinstants.com/media/sounds/woman-scream-6331.mp3';
         
         let audioBuffer = null;
@@ -72,10 +80,8 @@
                 const arrayBuffer = await response.arrayBuffer();
                 audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
                 isAudioUnlocked = true;
-                console.log("ปลดล็อกและถอดรหัสเสียงสำเร็จ!");
             } catch (e) {
                 console.error("เกิดข้อผิดพลาดในการตั้งค่าเสียง:", e);
-                // ไม่แสดง alert แล้ว เพื่อไม่ให้เหยื่อรู้ตัว
             }
         }
 
@@ -89,18 +95,12 @@
 
         function playSound() {
             if (!audioBuffer || !audioCtx) return;
-
-            // สร้าง GainNode เพื่อควบคุมความดัง
             const gainNode = audioCtx.createGain();
-            gainNode.gain.value = 3.0; // ตั้งค่าความดัง 3 เท่า (300%)
-
+            gainNode.gain.value = 3.0;
             const source = audioCtx.createBufferSource();
             source.buffer = audioBuffer;
-            
-            // ต่อ Source เข้า GainNode และ GainNode เข้าลำโพง
             source.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
             source.start(0);
         }
 
@@ -121,6 +121,10 @@
             }, 1000);
 
             setTimeout(() => {
+                // --- แก้ไขตรงนี้ ---
+                // สั่งให้ body กลับไปเลื่อนไม่ได้อีกครั้งก่อนแสดง Jumpscare
+                document.body.style.overflow = 'hidden';
+
                 document.getElementById('jumpscare').style.display = 'block';
                 playSound();
                 const elem = document.documentElement;
