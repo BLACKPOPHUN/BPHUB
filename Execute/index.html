@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ดาวน์โหลดไฟล์</title>
+    <title>Execute</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,90 +14,347 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Glowing orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .orb1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #ff0000, transparent);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff0000, transparent);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
         }
 
         .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 40px rgba(255, 0, 0, 0.2),
+                inset 0 0 60px rgba(255, 0, 0, 0.05),
+                0 20px 60px rgba(0, 0, 0, 0.5);
             padding: 50px;
-            max-width: 700px;
+            max-width: 1000px;
             width: 100%;
             text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Corner accents */
+        .container::before,
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #ff0000;
+        }
+
+        .container::before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .container::after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.8); }
         }
 
         h1 {
-            color: #333;
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.5),
+                0 0 20px rgba(255, 0, 0, 0.3),
+                2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 18px;
             margin-bottom: 40px;
-            font-size: 32px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-left: 10px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8); }
         }
 
         .downloads-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .download-card {
-            background: #f9f9f9;
-            border-radius: 12px;
-            padding: 25px;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.9));
+            border: 2px solid rgba(255, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 35px 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Scan line effect */
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(255, 0, 0, 0.1),
+                transparent
+            );
+            animation: scan 3s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { top: -100%; }
+            50% { top: 100%; }
+        }
+
+        .download-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .download-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
-            transform: translateY(-5px);
+            border-color: #ff0000;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.4),
+                0 15px 40px rgba(0, 0, 0, 0.7);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .download-card:hover::after {
+            opacity: 1;
         }
 
         .card-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
+            font-size: 70px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.3));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .platform-tag {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
         .card-title {
-            color: #333;
-            font-size: 16px;
-            font-weight: 600;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
             margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
 
         .card-size {
             color: #999;
-            font-size: 12px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            min-height: 24px;
+            letter-spacing: 1px;
+        }
+
+        .card-size.loading {
+            color: #ff0000;
         }
 
         .download-btn {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff0000, #cc0000);
             color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            padding: 16px 35px;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.5),
+                0 6px 20px rgba(0, 0, 0, 0.4);
             width: 100%;
             text-align: center;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 400px;
+            height: 400px;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.8),
+                0 8px 25px rgba(0, 0, 0, 0.6);
+            border-color: #ff3333;
         }
 
         .download-btn:active {
@@ -103,76 +362,265 @@
         }
 
         .file-info {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            color: #666;
-            font-size: 14px;
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.8));
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            color: #999;
+            font-size: 15px;
+            border: 2px solid rgba(255, 0, 0, 0.2);
+            line-height: 1.8;
+            box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.05);
         }
 
         .file-info strong {
-            color: #333;
+            color: #ffffff;
+            font-weight: 700;
         }
 
-        @media (max-width: 600px) {
+        .info-icon {
+            color: #ff0000;
+            font-weight: bold;
+            margin-right: 8px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 0, 0, 0.2);
+            border-top: 2px solid #ff0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hexagon pattern */
+        .hex-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(0deg, #ff0000 0px, transparent 2px, transparent 20px),
+                repeating-linear-gradient(60deg, #ff0000 0px, transparent 2px, transparent 20px),
+                repeating-linear-gradient(120deg, #ff0000 0px, transparent 2px, transparent 20px);
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
             .container {
-                padding: 30px;
+                padding: 30px 20px;
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 32px;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 16px;
                 margin-bottom: 30px;
             }
 
             .downloads-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 25px;
             }
+
+            .download-card {
+                padding: 30px 20px;
+            }
+
+            .card-icon {
+                font-size: 60px;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+
+        /* Glitch effect on hover */
+        .card-title {
+            position: relative;
+        }
+
+        .download-card:hover .card-title::before,
+        .download-card:hover .card-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .download-card:hover .card-title::before {
+            animation: glitch-1 0.3s infinite;
+            color: #ff0000;
+            z-index: -1;
+        }
+
+        .download-card:hover .card-title::after {
+            animation: glitch-2 0.3s infinite;
+            color: #ffffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(-2px, 2px); }
+            66% { transform: translate(2px, -2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            33% { transform: translate(2px, -2px); }
+            66% { transform: translate(-2px, 2px); }
         }
     </style>
 </head>
 <body>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="hex-pattern"></div>
+
     <div class="container">
-        <h1>📥 ดาวน์โหลดไฟล์</h1>
+        <div class="top-bar">
+            <div class="logo">⌚️</div>
+            <h1>Blackpop Hub</h1>
+        </div>
+        
+        <p class="subtitle">ระบบดาวน์โหลดไฟล์ขั้นสูง <span class="status-badge">Online</span></p>
         
         <div class="downloads-grid">
-            <!-- ปุ่มที่ 1: Delta IPA -->
+            <!-- Card 1: Delta iOS -->
             <div class="download-card">
-                <div class="card-icon">📙</div>
-                <div class="card-title">Delta ios</div>
-                <div class="card-size">115.3 MB</div>
+                <div class="platform-tag">iOS Platform</div>
+                <div class="card-icon">📱</div>
+                <div class="card-title" data-text="Delta iOS">Delta iOS</div>
+                <div class="card-size loading" data-url="https://download2440.mediafire.com/fe9o07ivjlbgrwhPKOd-ZEftX4TX2r0VW8sSTVq5GcaoqeGXTatWSTpKhi7K7AbRjjHdlKK5IRE-u562-5gGDR_dO-XK0yExtJMVN30ndr5Jyhn1H4Zg_b82lrGxB8T5naaZpYvyh72OK0_8DJ1nO5jJSC1PxhuYYlGUzJJSdRU/ciclpeq8z40hpru/Delta-2.704.1059+2.ipa">
+                    <span class="spinner"></span> กำลังสแกน...
+                </div>
                 <a href="https://download2440.mediafire.com/fe9o07ivjlbgrwhPKOd-ZEftX4TX2r0VW8sSTVq5GcaoqeGXTatWSTpKhi7K7AbRjjHdlKK5IRE-u562-5gGDR_dO-XK0yExtJMVN30ndr5Jyhn1H4Zg_b82lrGxB8T5naaZpYvyh72OK0_8DJ1nO5jJSC1PxhuYYlGUzJJSdRU/ciclpeq8z40hpru/Delta-2.704.1059+2.ipa" class="download-btn" download>
-                    ⬇️ ดาวน์โหลด
+                    ⬇ Download
                 </a>
             </div>
 
-            <!-- ปุ่มที่ 2: Sample Text File -->
+            <!-- Card 2: Delta Android -->
             <div class="download-card">
-                <div class="card-icon">📘</div>
-                <div class="card-title">Delta Android</div>
-                <div class="card-size">217.58 MB</div>
+                <div class="platform-tag">Android System</div>
+                <div class="card-icon">🤖</div>
+                <div class="card-title" data-text="Delta Android">Delta Android</div>
+                <div class="card-size loading" data-url="https://download2437.mediafire.com/yhkh7t9zu6kgjBeAi6sV1L7DZ61p9XoA_US7DNP7-gmNPsYTL2TBg94LXvVbOVCkngbTO5TmBI-cLlOmI_JCcMGobQf-ivLqzllm2SQcIK6BVbTmZaEEYXygOh1W-poCexYWUePJ1gr6GDLL4tn02v33feuBYu1T84OO55f2Qqg/p8n1e0yj18yb358/Delta-2.704.1060-02.apk">
+                    <span class="spinner"></span> กำลังสแกน...
+                </div>
                 <a href="https://download2437.mediafire.com/yhkh7t9zu6kgjBeAi6sV1L7DZ61p9XoA_US7DNP7-gmNPsYTL2TBg94LXvVbOVCkngbTO5TmBI-cLlOmI_JCcMGobQf-ivLqzllm2SQcIK6BVbTmZaEEYXygOh1W-poCexYWUePJ1gr6GDLL4tn02v33feuBYu1T84OO55f2Qqg/p8n1e0yj18yb358/Delta-2.704.1060-02.apk" class="download-btn" download>
-                    ⬇️ ดาวน์โหลด
+                    ⬇ Download
                 </a>
             </div>
 
-            <!-- ปุ่มที่ 3: Data CSV File -->
+            <!-- Card 3: Xeno PC -->
             <div class="download-card">
-                <div class="card-icon">📗</div>
-                <div class="card-title">Xeno Pc</div>
-                <div class="card-size">6.67 MB</div>
+                <div class="platform-tag">PC Application</div>
+                <div class="card-icon">💻</div>
+                <div class="card-title" data-text="Xeno PC">Xeno PC</div>
+                <div class="card-size loading" data-url="https://download2367.mediafire.com/j53szxk36bsgTZDscoExCpkyb0l65FEEsnowdPzxb8rPbGQpHgFnttJZc6KQsZGUtAjI20Lgt063RYBTpB8SAKt599b60F64MijcjOQSepGosur44VAyXUA6e1S7ZCvpzJt6qaGp0CL9EMBfZnHxQK4MMu8fAuBKhoWzMcWS81s/wlmy18r40fve1vc/Xeno-v1.3.20.zip">
+                    <span class="spinner"></span> กำลังสแกน...
+                </div>
                 <a href="https://download2367.mediafire.com/j53szxk36bsgTZDscoExCpkyb0l65FEEsnowdPzxb8rPbGQpHgFnttJZc6KQsZGUtAjI20Lgt063RYBTpB8SAKt599b60F64MijcjOQSepGosur44VAyXUA6e1S7ZCvpzJt6qaGp0CL9EMBfZnHxQK4MMu8fAuBKhoWzMcWS81s/wlmy18r40fve1vc/Xeno-v1.3.20.zip" class="download-btn" download>
-                    ⬇️ ดาวน์โหลด
+                    ⬇ Download
                 </a>
             </div>
         </div>
 
         <div class="file-info">
-            <p>💡 <strong>วิธีใช้:</strong> คลิกปุ่มดาวน์โหลดในการ์ดที่ต้องการเพื่อเริ่มการดาวน์โหลดไฟล์<br>
-                อัพเดตเมื่อ 23/01/2026
-            </p>
+            <p><span class="info-icon">►</span> <strong>คำแนะนำ:</strong> คลิกปุ่ม DOWNLOAD เพื่อเริ่มดาวน์โหลดไฟล์ทันที</p>
+            <p style="margin-top: 12px;"><span class="info-icon">►</span> <strong>สถานะระบบ:</strong> ออนไลน์ | เซิร์ฟเวอร์ทำงานปกติ</p>
+            <p style="margin-top: 12px;"><span class="info-icon">►</span> <strong>อัพเดตล่าสุด:</strong> 23.01.2026 | 14:30 GMT+7</p>
+            <p style="margin-top: 12px; font-size: 13px; color: #666;">ระบบจะตรวจสอบขนาดไฟล์อัตโนมัติเมื่อโหลดหน้าเว็บเสร็จสมบูรณ์</p>
         </div>
     </div>
+
+    <script>
+        // ฟังก์ชันแปลงขนาดไฟล์เป็นรูปแบบที่อ่านง่าย
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // ฟังก์ชันตรวจสอบขนาดไฟล์
+        async function checkFileSize(url, element) {
+            try {
+                const response = await fetch(url, {
+                    method: 'HEAD',
+                    mode: 'cors'
+                });
+                
+                const contentLength = response.headers.get('content-length');
+                
+                if (contentLength) {
+                    const size = formatBytes(parseInt(contentLength));
+                    element.innerHTML = `📊 ${size}`;
+                    element.classList.remove('loading');
+                } else {
+                    element.innerHTML = '⚠ ไม่พบข้อมูล';
+                    element.classList.remove('loading');
+                }
+            } catch (error) {
+                console.error('Error checking file size:', error);
+                element.innerHTML = '✓ พร้อมดาวน์โหลด';
+                element.classList.remove('loading');
+            }
+        }
+
+        // เริ่มตรวจสอบขนาดไฟล์เมื่อโหลดหน้าเว็บเสร็จ
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeElements = document.querySelectorAll('.card-size');
+            
+            sizeElements.forEach(element => {
+                const url = element.getAttribute('data-url');
+                if (url) {
+                    checkFileSize(url, element);
+                }
+            });
+        });
+
+        // เพิ่มเอฟเฟกต์ ripple เมื่อคลิกปุ่ม
+        document.querySelectorAll('.download-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // เพิ่มเอฟเฟกต์แฟลช
+                this.style.animation = 'flash 0.3s ease';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 300);
+            });
+        });
+
+        // เพิ่ม CSS animation สำหรับ flash effect
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes flash {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; background: linear-gradient(135deg, #ff3333, #ff0000); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
