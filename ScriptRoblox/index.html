@@ -5,57 +5,472 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BlackpopHub</title>
 <style>
-body { font-family: sans-serif; background: #121212; color: white; padding: 20px; margin:0; }
-h2 { text-align: center; font-size: 28px; margin-bottom: 20px; }
-input, button, textarea { border-radius: 6px; border:none; outline:none; }
-input { width: calc(100% - 16px); padding: 8px; margin: 5px 0; }
-button { padding:10px 15px; margin:5px 0; background:#ff003c; color:white; cursor:pointer; transition:0.3s; }
-button:hover { background:#2563eb; }
-a { color: #00f; cursor:pointer; display:block; text-align:center; margin-top:5px; }
-.box { background:#1e1e1e; padding:15px; margin:0 auto 20px auto; width:90%; max-width:700px; border-radius:12px; box-shadow:0 0 10px #00000050; position:relative; }
-textarea { width:100%; height:100px; padding:10px; resize:none; background:#111; color:#eee; font-size:14px; }
-textarea[readonly]{background:#222;}
-.msg { color: #8bf48a; display:none; margin-top:8px; text-align:center; }
-#logout { position:fixed; left:10px; bottom:10px; padding:15px 20px; background:#ff6600; font-size:16px; border-radius:8px; cursor:pointer; display:none; transition:0.3s; }
-#logout:hover { background:#ff3300; transform: scale(1.05);}
-#username-btn{position:fixed;right:10px;top:10px;background:#2563eb;padding:10px 15px;border-radius:8px;cursor:pointer;display:none;}
-#user-time-box{position:fixed;right:10px;top:50px;background:#333;padding:10px;border-radius:8px;display:none;max-width:200px;word-break:break-word;}
-.edit-btn{background:#ff9800;margin-left:10px;}
-.edit-btn:hover{background:#f57c00;}
-.save-btn{background:#4caf50;}
-.save-btn:hover{background:#45a049;}
-.cancel-btn{background:#666;}
-.cancel-btn:hover{background:#555;}
-.delete-btn{background:#f44336;position:absolute;top:15px;right:15px;}
-.delete-btn:hover{background:#d32f2f;}
-.editing-indicator{color:#ff9800;font-size:12px;margin-top:5px;display:none;}
-#add-script-btn{background:#4caf50;width:90%;max-width:700px;display:none;margin:20px auto;font-size:18px;padding:15px;}
-#add-script-btn:hover{background:#45a049;}
-.online-users{position:fixed;left:10px;top:10px;background:#333;padding:10px;border-radius:8px;font-size:12px;max-width:150px;display:none;}
-.online-dot{display:inline-block;width:8px;height:8px;background:#4caf50;border-radius:50%;margin-right:5px;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
-@media(max-width:480px){
-    h2{font-size:24px;}
-    #logout, #username-btn{padding:10px 12px;font-size:14px;}
-    .online-users{position:static;margin-bottom:10px;max-width:100%;}
+* { box-sizing: border-box; }
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+    color: #ffffff; 
+    padding: 20px; 
+    margin: 0;
+    min-height: 100vh;
+}
+
+h2 { 
+    text-align: center; 
+    font-size: 32px; 
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 2px;
+    color: #ffffff;
+}
+
+input, button, textarea { 
+    border-radius: 12px; 
+    border: 2px solid transparent;
+    outline: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input { 
+    width: calc(100% - 24px); 
+    padding: 12px; 
+    margin: 10px 0; 
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(33, 150, 243, 0.8);
+    box-shadow: 0 0 20px rgba(33, 150, 243, 0.3);
+}
+
+button { 
+    padding: 12px 20px; 
+    margin: 5px 0; 
+    background: linear-gradient(135deg, #ff3333, #cc0000);
+    color: white; 
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
+}
+
+button:hover { 
+    background: linear-gradient(135deg, #ff5555, #dd1111);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 51, 51, 0.5);
+}
+
+button:active { transform: translateY(0); }
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+a { 
+    color: #2196F3; 
+    cursor: pointer; 
+    display: block; 
+    text-align: center; 
+    margin-top: 5px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+a:hover { 
+    color: #64B5F6;
+    text-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+.box { 
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.8));
+    backdrop-filter: blur(10px);
+    padding: 20px; 
+    margin: 0 auto 20px auto; 
+    width: 90%; 
+    max-width: 700px; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative; 
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes colorCycle {
+    0% { color: #ffffff; }      /* เริ่มที่สีขาว */
+    50% { color: #ff3333; }     /* เปลี่ยนเป็นแดง */
+    100% { color: #ffffff; }    /* กลับมาขาว */
+}
+
+textarea { 
+    width: 100%; 
+    height: 120px; 
+    padding: 12px; 
+    resize: none; 
+    background: rgba(10, 10, 10, 0.9);
+    
+    /* ส่วนที่เพิ่มเข้ามาให้สีขยับได้ */
+    animation: colorCycle 3s infinite ease-in-out; 
+    
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 10px 0;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+textarea:focus {
+    border-color: rgba(33, 150, 243, 0.8);
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.2);
+}
+
+textarea[readonly] { 
+    background: rgba(10, 10, 10, 0.9);
+    cursor: default;
+}
+
+textarea.locked {
+    background: rgba(255, 51, 51, 0.1);
+    border-color: rgba(255, 51, 51, 0.4);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+textarea:not([readonly]):not(.locked) {
+    background: rgba(20, 50, 100, 0.8);
+}.msg { 
+    color: #00ff00; 
+    display: none; 
+    margin-top: 10px; 
+    text-align: center;
+    font-weight: 600;
+    animation: popIn 0.4s ease-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+#logout { 
+    position: fixed; 
+    left: 10px; 
+    bottom: 10px; 
+    padding: 15px 25px; 
+    background: linear-gradient(135deg, #ff3333, #cc0000);
+    font-size: 16px; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    display: none; 
+    transition: all 0.3s;
+    border: none;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 51, 51, 0.4);
+}
+
+#logout:hover { 
+    background: linear-gradient(135deg, #ff5555, #dd1111);
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(255, 51, 51, 0.6);
+}
+
+#discord-btn {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #5865F2, #4752C4);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+    z-index: 999;
+}
+
+#discord-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 25px rgba(88, 101, 242, 0.6);
+}
+
+#username-btn {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: none;
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+    z-index: 100;
+}
+
+#username-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.5);
+}
+
+#user-time-box {
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    background: rgba(33, 150, 243, 0.15);
+    padding: 15px;
+    border-radius: 12px;
+    display: none;
+    max-width: 250px;
+    word-break: break-word;
+    border: 2px solid rgba(33, 150, 243, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+    z-index: 100;
+    color: #ffffff;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.edit-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    flex: 1;
+    min-width: 100px;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.edit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #ff3333, #cc0000);
+    flex: 1;
+    min-width: 100px;
+    color: white;
+}
+
+.save-btn:hover {
+    background: linear-gradient(135deg, #ff5555, #dd1111);
+    box-shadow: 0 4px 15px rgba(255, 51, 51, 0.4);
+}
+
+.save-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #666, #444);
+    flex: 1;
+    min-width: 100px;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: linear-gradient(135deg, #777, #555);
+    box-shadow: 0 4px 15px rgba(100, 100, 100, 0.4);
+}
+
+.cancel-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #ff3333, #cc0000);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #ff5555, #dd1111);
+    box-shadow: 0 4px 15px rgba(255, 51, 51, 0.4);
+}
+
+.delete-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.copy-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    flex: 1;
+    min-width: 100px;
+    color: white;
+}
+
+.copy-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+.copy-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editing-indicator {
+    color: #ff3333;
+    font-size: 12px;
+    margin-top: 8px;
+    display: none;
+    padding: 8px;
+    background: rgba(255, 51, 51, 0.15);
+    border-left: 3px solid #ff3333;
+    border-radius: 4px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.lock-indicator {
+    color: #FFB74D;
+    font-size: 11px;
+    margin-top: 8px;
+    padding: 8px;
+    background: rgba(255, 183, 77, 0.15);
+    border-left: 3px solid #FFB74D;
+    border-radius: 4px;
+    display: none;
+}
+
+.lock-timer {
+    font-weight: 600;
+    color: #ff3333;
+}
+
+#add-script-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    width: 90%;
+    max-width: 700px;
+    display: none;
+    margin: 30px auto;
+    font-size: 18px;
+    padding: 18px;
+    border: 2px dashed rgba(33, 150, 243, 0.5);
+    transition: all 0.3s;
+    color: white;
+}
+
+#add-script-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    border-color: rgba(33, 150, 243, 1);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+    transform: translateY(-2px);
+}
+
+.online-users {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(200, 200, 200, 0.05));
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    max-width: 250px;
+    display: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    color: #ffffff;
+}
+
+.online-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #00ff00;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+.script-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #ffffff;
+    word-break: break-word;
+    transition: all 0.3s;
+}
+
+.script-title:hover {
+    text-shadow: 0 0 15px rgba(33, 150, 243, 0.5);
+}
+
+.script-title[contenteditable="true"] {
+    background: rgba(33, 150, 243, 0.15);
+    padding: 8px;
+    border-radius: 6px;
+    outline: 2px solid #FFB74D;
+}
+
+@media(max-width: 480px) {
+    h2 { font-size: 24px; }
+    #logout, #username-btn { padding: 10px 15px; font-size: 14px; }
+    .online-users { position: static; margin-bottom: 15px; max-width: 100%; }
+    .btn-group { flex-direction: column; }
+    .btn-group button { width: 100%; }
+    #discord-btn { width: 50px; height: 50px; font-size: 28px; }
 }
 </style>
 </head>
 <body>
 
+<!-- Online Users - อยู่หน้าสุด -->
+<div id="online-users" class="online-users">
+    <span class="online-dot"></span><strong>ออนไลน์: </strong><span id="online-users-list">-</span>
+</div>
+
 <!-- Login -->
 <div id="login-container" class="box">
-    <h2>Login</h2>
+    <h2>🔐 LOGIN</h2>
     <input type="text" id="login-username" placeholder="Username"><br>
     <input type="password" id="login-password" placeholder="Password"><br>
     <button onclick="login()">เข้าสู่ระบบ</button>
     <a onclick="showRegister()">หารหัส</a>
-    <p id="login-msg" style="color:red;"></p>
+    <p id="login-msg" style="color:#ff3333;"></p>
 </div>
 
 <!-- Register -->
 <div id="register-container" class="box" style="display:none;">
-    <h2>หารหัส</h2>
+    <h2>🔑 หารหัส</h2>
     <p>กดปุ่มด้านล่างเพื่อไปยังเว็บที่กำหนด แล้วนำรหัสกลับมาใส่ในหน้า Login</p>
     <button onclick="openCodeSite()">ไปยังเว็บหาโค้ด</button>
     <a onclick="showLogin()">กลับไปหน้า Login</a>
@@ -63,14 +478,14 @@ textarea[readonly]{background:#222;}
 
 <!-- Scripts -->
 <div id="script-container" style="display:none;">
-<div id="online-users" class="online-users"></div>
-<h2>Script Roblox</h2>
+<h2>📜 SCRIPT ROBLOX</h2>
 <div id="scripts-list"></div>
 <button id="add-script-btn" onclick="addNewScript()">➕ เพิ่มช่อง Script ใหม่</button>
 </div>
 
-<div id="logout" onclick="logout()">Logout</div>
-<div id="username-btn" onclick="toggleUserTime()">User</div>
+<button id="logout" onclick="logout()">🚪 Logout</button>
+<button id="discord-btn" onclick="openDiscord()" title="Join Discord">💜</button>
+<button id="username-btn" onclick="toggleUserTime()">👤 User</button>
 <div id="user-time-box"></div>
 
 <!-- Firebase Scripts -->
@@ -118,6 +533,9 @@ let scriptsRef = database.ref('scripts');
 let onlineRef = database.ref('online');
 let editingRef = database.ref('editing');
 let originalContent = {};
+let lockTimers = {};
+let timerIntervals = {};
+let LOCK_TIMEOUT = 5 * 60 * 1000; // 5 นาที
 
 // ====== INITIAL SCRIPTS DATA ======
 const initialScripts = [
@@ -154,6 +572,10 @@ function openCodeSite(){
     window.open("https://rekonise.com/หาคีย์เข้าเว็บ-abgq0","_blank");
 }
 
+function openDiscord(){
+    window.open("https://discord.gg/blackpophub","_blank");
+}
+
 async function login(){
     const u = document.getElementById("login-username").value.trim();
     const p = document.getElementById("login-password").value.trim();
@@ -181,7 +603,7 @@ async function showScript(){
     document.getElementById('script-container').style.display='block';
     document.getElementById('logout').style.display='block';
     document.getElementById('username-btn').style.display='block';
-    document.getElementById('username-btn').innerText = currentUser.username;
+    document.getElementById('username-btn').innerText = '👤 ' + currentUser.username;
     loginTime = new Date();
     startTimer();
     
@@ -205,6 +627,10 @@ async function logout(){
     
     currentUser=null;
     clearInterval(intervalTimer);
+    Object.values(lockTimers).forEach(t => clearTimeout(t));
+    Object.values(timerIntervals).forEach(t => clearInterval(t));
+    lockTimers = {};
+    timerIntervals = {};
     localStorage.removeItem("logged_in_user");
     
     scriptsRef.off();
@@ -246,9 +672,13 @@ function listenToOnlineUsers(){
         }
         
         const box = document.getElementById('online-users');
+        const list = document.getElementById('online-users-list');
         if(box && users.length > 0){
             const uniqueUsers = [...new Set(users)];
-            box.innerHTML = '<span class="online-dot"></span>ออนไลน์: ' + uniqueUsers.join(', ');
+            list.innerText = uniqueUsers.join(', ');
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
         }
     });
 }
@@ -297,36 +727,38 @@ function createScriptBox(script){
     const box = document.createElement('div');
     box.className = 'box';
     box.id = 'box-' + script.id;
-    
     let html = `
-        <h3 id="title-${script.id}" contenteditable="false">${script.title}</h3>
+        <h3 id="title-${script.id}" class="script-title" contenteditable="false">${script.title}</h3>
         <textarea id="text-${script.id}" readonly>${script.content}</textarea>
-        <button onclick="copyFrom('text-${script.id}')">📋 คัดลอก</button>
+        <div class="btn-group">
+            <button class="copy-btn" onclick="copyFrom('text-${script.id}')">📋 คัดลอก</button>
     `;
-    
     if(currentUser && currentUser.admin){
         html += `
             <button id="edit-${script.id}" class="edit-btn" onclick="editScript(${script.id})">✏️ แก้ไข</button>
             <button id="save-${script.id}" class="save-btn" style="display:none;" onclick="saveScript(${script.id})">💾 บันทึก</button>
             <button id="cancel-${script.id}" class="cancel-btn" style="display:none;" onclick="cancelEdit(${script.id})">❌ ยกเลิก</button>
-            <button class="delete-btn" onclick="deleteScript(${script.id})">🗑️ ลบ</button>
         `;
     }
-    
+    html += `</div>`;
+    if(currentUser && currentUser.admin){
+        html += `<button class="delete-btn" onclick="deleteScript(${script.id})">🗑️</button>`;
+    }
     html += `
         <div id="text-${script.id}-msg" class="msg">✔ คัดลอกแล้ว!</div>
-        <div id="editing-${script.id}" class="editing-indicator">🔴 กำลังแก้ไข...</div>
+        <div id="save-msg-${script.id}-msg" class="msg" style="color: #00ff00;">✔ บันทึกข้อมูลเรียบร้อยแล้ว!</div>
+        <div id="editing-${script.id}" class="editing-indicator"></div>
+        <div id="lock-${script.id}" class="lock-indicator"></div>
     `;
-    
     box.innerHTML = html;
     return box;
+
 }
 
 async function addNewScript(){
     const snapshot = await scriptsRef.once('value');
     const data = snapshot.val() || {};
 
-    // หา id สูงสุด
     const ids = Object.keys(data).map(Number);
     const nextId = ids.length > 0 ? Math.max(...ids) + 1 : 1;
 
@@ -348,18 +780,14 @@ async function deleteScript(id){
     const data = snapshot.val();
     if(!data) return;
 
-    // ลบสถานะแก้ไข
     await editingRef.child(id.toString()).remove();
 
-    // เอาช่องที่ไม่ถูกลบ
     const scriptsArray = Object.values(data)
         .filter(s => s.id !== id)
         .sort((a, b) => a.id - b.id);
 
-    // ล้าง DB ก่อน
     await scriptsRef.remove();
 
-    // เขียนกลับใหม่ให้เลขเรียง 1,2,3,...
     const updates = {};
     let index = 1;
 
@@ -372,7 +800,7 @@ async function deleteScript(id){
     await scriptsRef.set(updates);
 }
 
-// ====== FIREBASE EDIT SYSTEM ======
+// ====== FIREBASE EDIT SYSTEM WITH LOCK ======
 function listenToEditing(){
     editingRef.on('value', (snapshot) => {
         const editingData = snapshot.val();
@@ -386,16 +814,62 @@ function listenToEditing(){
             if(editingData && editingData[id]){
                 const data = editingData[id];
                 if(data.username !== currentUser.username){
+                    // คนอื่นกำลังแก้
                     indicator.style.display = 'block';
                     indicator.innerText = `🔴 ${data.username} กำลังแก้ไข...`;
+                    lockScript(id);
                 } else {
+                    // เรากำลังแก้เอง
                     indicator.style.display = 'none';
+                    // unlockScript(id);  <-- ลบบรรทัดนี้ออกครับ เพราะมันจะไปทำให้ช่องกลายเป็น ReadOnly
                 }
             } else {
+                // ไม่มีใครแก้
                 indicator.style.display = 'none';
+                unlockScript(id);
             }
         });
     });
+}
+function lockScript(id){
+    const textarea = document.getElementById('text-' + id);
+    const title = document.getElementById('title-' + id);
+    const editBtn = document.getElementById('edit-' + id);
+    const saveBtn = document.getElementById('save-' + id);
+    const cancelBtn = document.getElementById('cancel-' + id);
+    const copyBtn = document.querySelector(`#box-${id} .copy-btn`);
+    const deleteBtn = document.querySelector(`#box-${id} .delete-btn`);
+    
+    if(textarea){
+        textarea.disabled = true;
+        textarea.classList.add('locked');
+        textarea.readOnly = true;
+    }
+    if(title) title.contentEditable = false;
+    if(editBtn) editBtn.disabled = true;
+    if(saveBtn) saveBtn.disabled = true;
+    if(cancelBtn) cancelBtn.disabled = true;
+    if(copyBtn) copyBtn.disabled = true;
+    if(deleteBtn) deleteBtn.disabled = true;
+}
+
+function unlockScript(id){
+    const textarea = document.getElementById('text-' + id);
+    const title = document.getElementById('title-' + id);
+    const editBtn = document.getElementById('edit-' + id);
+    const saveBtn = document.getElementById('save-' + id);
+    const cancelBtn = document.getElementById('cancel-' + id);
+    const copyBtn = document.querySelector(`#box-${id} .copy-btn`);
+    const deleteBtn = document.querySelector(`#box-${id} .delete-btn`);
+    
+    if(textarea){
+        textarea.disabled = false;
+        textarea.classList.remove('locked');
+        textarea.readOnly = true;
+    }
+    if(editBtn) editBtn.disabled = false;
+    if(copyBtn) copyBtn.disabled = false;
+    if(deleteBtn) deleteBtn.disabled = false;
 }
 
 async function editScript(id){
@@ -409,10 +883,12 @@ async function editScript(id){
         title: title.innerText
     };
     
+    // ให้สามารถพิมได้
     textarea.readOnly = false;
-    textarea.style.background = '#1a3a1a';
+    textarea.disabled = false;
+    textarea.style.background = 'rgba(20, 50, 100, 0.8)';
     title.contentEditable = true;
-    title.style.outline = '2px solid #ff9800';
+    title.style.outline = '2px solid #FFB74D';
     
     const editBtn = document.getElementById('edit-' + id);
     const saveBtn = document.getElementById('save-' + id);
@@ -426,38 +902,102 @@ async function editScript(id){
         username: currentUser.username,
         timestamp: firebase.database.ServerValue.TIMESTAMP
     });
+    
+    // เคลียร์ timer เก่า
+    if(lockTimers[id]) clearTimeout(lockTimers[id]);
+    if(timerIntervals[id]) clearInterval(timerIntervals[id]);
+    
+    // ตั้ง timer ใหม่
+    lockTimers[id] = setTimeout(async () => {
+        await editingRef.child(id.toString()).remove();
+        cancelEdit(id);
+    }, LOCK_TIMEOUT);
+    
+    // เพิ่ม event listener สำหรับ reset timer เมื่อมีการพิม
+    const handleInput = () => resetLockTimer(id);
+    textarea.removeEventListener('input', handleInput);
+    textarea.addEventListener('input', handleInput);
+    title.removeEventListener('input', handleInput);
+    title.addEventListener('input', handleInput);
+    
+    updateLockTimer(id);
+}
+
+function resetLockTimer(id){
+    // ยกเลิก timer เก่า
+    if(lockTimers[id]) clearTimeout(lockTimers[id]);
+    
+    // ตั้ง timer ใหม่
+    lockTimers[id] = setTimeout(async () => {
+        await editingRef.child(id.toString()).remove();
+        cancelEdit(id);
+    }, LOCK_TIMEOUT);
+    
+    // อัพเดท display ใหม่
+    updateLockTimer(id);
+}
+
+function updateLockTimer(id){
+    const lockIndicator = document.getElementById('lock-' + id);
+    if(!lockIndicator) return;
+    
+    // เคลียร์ interval เก่า
+    if(timerIntervals[id]) clearInterval(timerIntervals[id]);
+    
+    const startTime = Date.now();
+    timerIntervals[id] = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const remaining = Math.max(0, LOCK_TIMEOUT - elapsed);
+        const seconds = Math.ceil(remaining / 1000);
+        
+        if(seconds > 0){
+            lockIndicator.style.display = 'block';
+            lockIndicator.innerHTML = `⏱️ ปลดล็อกอัตโนมัติใน <span class="lock-timer">${seconds}</span> วินาที (ใช้งานเพื่อนับใหม่)`;
+        } else {
+            lockIndicator.style.display = 'none';
+            clearInterval(timerIntervals[id]);
+        }
+    }, 100);
 }
 
 async function saveScript(id){
     const textarea = document.getElementById('text-' + id);
     const title = document.getElementById('title-' + id);
-    
     if(!textarea || !title) return;
     
-    const updatedScript = {
-        id: id,
-        title: title.innerText.trim(),
-        content: textarea.value
-    };
-    
-    await scriptsRef.child(id.toString()).set(updatedScript);
-    
-    textarea.readOnly = true;
-    textarea.style.background = '#222';
-    title.contentEditable = false;
-    title.style.outline = 'none';
-    
-    const editBtn = document.getElementById('edit-' + id);
-    const saveBtn = document.getElementById('save-' + id);
-    const cancelBtn = document.getElementById('cancel-' + id);
-    
-    if(editBtn) editBtn.style.display='inline-block';
-    if(saveBtn) saveBtn.style.display='none';
-    if(cancelBtn) cancelBtn.style.display='none';
-    
-    await editingRef.child(id.toString()).remove();
-    
-    showMsg('text-' + id);
+    try {
+        const updatedScript = {
+            id: id,
+            title: title.innerText.trim(),
+            content: textarea.value
+        };
+        
+        // บันทึกลง Firebase
+        await scriptsRef.child(id.toString()).set(updatedScript);
+        
+        // ปรับหน้าจอหลังบันทึก
+        textarea.readOnly = true;
+        textarea.style.background = 'rgba(10, 10, 10, 0.9)';
+        title.contentEditable = false;
+        title.style.outline = 'none';
+        
+        document.getElementById('edit-' + id).style.display='inline-block';
+        document.getElementById('save-' + id).style.display='none';
+        document.getElementById('cancel-' + id).style.display='none';
+        
+        await editingRef.child(id.toString()).remove();
+        
+        // ล้าง Timer
+        if(lockTimers[id]) clearTimeout(lockTimers[id]);
+        if(timerIntervals[id]) clearInterval(timerIntervals[id]);
+        if(document.getElementById('lock-' + id)) document.getElementById('lock-' + id).style.display = 'none';
+
+        // แสดงข้อความ "บันทึกข้อมูลเรียบร้อยแล้ว!"
+        showMsg('save-msg-' + id); 
+
+    } catch (error) {
+        alert("เกิดข้อผิดพลาดในการบันทึก: " + error.message);
+    }
 }
 
 async function cancelEdit(id){
@@ -472,7 +1012,8 @@ async function cancelEdit(id){
     }
     
     textarea.readOnly = true;
-    textarea.style.background = '#222';
+    textarea.disabled = false;
+    textarea.style.background = 'rgba(10, 10, 10, 0.9)';
     title.contentEditable = false;
     title.style.outline = 'none';
     
@@ -485,14 +1026,55 @@ async function cancelEdit(id){
     if(cancelBtn) cancelBtn.style.display='none';
     
     await editingRef.child(id.toString()).remove();
+    
+    if(lockTimers[id]) clearTimeout(lockTimers[id]);
+    if(timerIntervals[id]) clearInterval(timerIntervals[id]);
+    lockTimers[id] = null;
+    timerIntervals[id] = null;
+    
+    const lockIndicator = document.getElementById('lock-' + id);
+    if(lockIndicator) lockIndicator.style.display = 'none';
 }
 
 // ====== UTILITY FUNCTIONS ======
+// แก้ไขฟังก์ชันคัดลอกใหม่ให้ปลอดภัยขึ้น
 function copyFrom(id){
     const ta = document.getElementById(id);
     if(!ta) return;
     const text = ta.value;
-    navigator.clipboard.writeText(text).then(() => showMsg(id));
+
+    // วิธีที่ 1: ใช้ Clipboard API (สำหรับ HTTPS)
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+            .then(() => showMsg(id))
+            .catch(err => copyFallback(text, id));
+    } else {
+        // วิธีที่ 2: ใช้คำสั่งสำรอง (สำหรับ HTTP หรือมือถือรุ่นเก่า)
+        copyFallback(text, id);
+    }
+}
+
+// ฟังก์ชันสำรองสำหรับคัดลอก
+function copyFallback(text, id) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        showMsg(id);
+    } catch (err) {
+        console.error('คัดลอกไม่ได้:', err);
+    }
+    document.body.removeChild(textArea);
+}
+
+function showMsg(id){ 
+    // ตรวจสอบว่ามี id-msg หรือไม่ (เช่น text-1-msg หรือ save-msg-1-msg)
+    const msg = document.getElementById(id + '-msg'); 
+    if(!msg) return;
+    msg.style.display='block';
+    setTimeout(() => msg.style.display='none', 2000);
 }
 
 function showMsg(id){ 
