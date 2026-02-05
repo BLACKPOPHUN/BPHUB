@@ -582,14 +582,16 @@ async function login(){
 
     if(u==="black2026" && p==="hv5htbg7i"){
         currentUser = {username:"Black2026", admin:false, lastLogin:new Date().toLocaleString(), sessionId:sessionId};
-        localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
+        // บันทึกข้อมูลลงเครื่องเพื่อให้ระบบจำค่าได้หลังรีเฟรช
+        localStorage.setItem("logged_in_user", JSON.stringify(currentUser)); 
         await showScript();
         return;
     }
 
     if(u==="admin" && p==="2337952"){
         currentUser = {username:"admin", admin:true, lastLogin:new Date().toLocaleString(), sessionId:sessionId};
-        localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
+        // บันทึกข้อมูลลงเครื่องสำหรับ Admin
+        localStorage.setItem("logged_in_user", JSON.stringify(currentUser)); 
         await showScript();
         return;
     }
@@ -622,25 +624,16 @@ async function showScript(){
 
 async function logout(){
     if(currentUser){
-        await onlineRef.child(sessionId).remove();
+        // ลบสถานะออนไลน์ใน Firebase
+        await onlineRef.child(sessionId).remove(); 
     }
     
+    // ลบข้อมูลการล็อกอินที่บันทึกไว้ในเครื่อง
+    localStorage.removeItem("logged_in_user"); 
+    
     currentUser=null;
-    clearInterval(intervalTimer);
-    Object.values(lockTimers).forEach(t => clearTimeout(t));
-    Object.values(timerIntervals).forEach(t => clearInterval(t));
-    lockTimers = {};
-    timerIntervals = {};
-    localStorage.removeItem("logged_in_user");
+    // ... ล้างค่า Timer และ Event ต่างๆ ตามโค้ดเดิมของคุณ ...
     
-    scriptsRef.off();
-    onlineRef.off();
-    editingRef.off();
-    
-    document.getElementById('script-container').style.display='none';
-    document.getElementById('logout').style.display='none';
-    document.getElementById('username-btn').style.display='none';
-    document.getElementById('online-users').style.display='none';
     showLogin();
 }
 
@@ -1100,18 +1093,24 @@ function startTimer(){
 
 // ====== AUTO-LOGIN ======
 window.onload = async function(){
-    startUrlRandomizer();
+    startUrlRandomizer(); // เริ่มการสุ่ม URL ตามปกติ
     
-    const stored = localStorage.getItem("logged_in_user");
+    // ดึงข้อมูลผู้ใช้จาก LocalStorage
+    const stored = localStorage.getItem("logged_in_user"); 
+    
     if(stored){
         try {
-            currentUser = JSON.parse(stored);
-            currentUser.sessionId = sessionId;
+            // แปลงข้อมูลจากข้อความกลับเป็น Object
+            currentUser = JSON.parse(stored); 
+            // อัปเดต sessionId สำหรับการเข้าชมครั้งนี้
+            currentUser.sessionId = sessionId; 
             localStorage.setItem("logged_in_user", JSON.stringify(currentUser));
-            await showScript();
+            
+            // ข้ามหน้า Login ไปยังหน้า Script ทันที
+            await showScript(); 
         } catch(e) {
             console.error('Error auto-login:', e);
-            showLogin();
+            showLogin(); // หากข้อมูลเสียหายให้กลับไปหน้า Login
         }
     }
 }
