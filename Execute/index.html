@@ -417,41 +417,6 @@
             pointer-events: none;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
-            }
-
-            h1 {
-                font-size: 32px;
-                margin-bottom: 10px;
-            }
-
-            .subtitle {
-                font-size: 16px;
-                margin-bottom: 30px;
-            }
-
-            .downloads-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-            }
-
-            .download-card {
-                padding: 30px 20px;
-            }
-
-            .card-icon {
-                font-size: 60px;
-            }
-
-            .logo {
-                width: 40px;
-                height: 40px;
-                font-size: 20px;
-            }
-        }
-
         /* Glitch effect on hover */
         .card-title {
             position: relative;
@@ -490,12 +455,268 @@
             33% { transform: translate(2px, -2px); }
             66% { transform: translate(-2px, 2px); }
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.98), rgba(20, 20, 20, 0.98));
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 0, 0.4),
+                inset 0 0 40px rgba(255, 0, 0, 0.05);
+            animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            color: #ff0000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #ff0000;
+            transform: rotate(90deg);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .modal-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.5));
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            color: #999;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-option-btn {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9), rgba(30, 30, 30, 0.9));
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            color: #ffffff;
+            padding: 20px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-option-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .modal-option-btn:hover::before {
+            left: 100%;
+        }
+
+        .modal-option-btn:hover {
+            border-color: #ff0000;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            transform: translateX(5px);
+            box-shadow: 
+                0 0 25px rgba(255, 0, 0, 0.6),
+                0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-icon {
+            font-size: 24px;
+        }
+
+        .option-arrow {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-option-btn:hover .option-arrow {
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+            .downloads-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .download-card {
+                padding: 30px 20px;
+            }
+
+            .card-icon {
+                font-size: 60px;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-title {
+                font-size: 24px;
+            }
+
+            .modal-option-btn {
+                padding: 18px 20px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
     <div class="hex-pattern"></div>
+
+    <!-- Modal for iOS options -->
+    <div class="modal-overlay" id="iosModal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal()">×</div>
+            <div class="modal-header">
+                <div class="modal-icon">📱</div>
+                <div class="modal-title">Delta iOS</div>
+                <div class="modal-subtitle">เลือกวิธีการติดตั้ง</div>
+            </div>
+            <div class="modal-options">
+                <a href="https://cdn.gloopup.net/file/Delta-2.705.924.ipa" class="modal-option-btn" download>
+                    <div class="option-label">
+                        <span class="option-icon">⚡</span>
+                        <span>1. Delta (IPA File)</span>
+                    </div>
+                    <span class="option-arrow">→</span>
+                </a>
+                <a href="https://www.mediafire.com/file/6zf8ixda2teg896/Anti-revoke_DNS.mobileconfig/file?dkey=jqhxwq8h63r&r=628" class="modal-option-btn" download>
+                    <div class="option-label">
+                        <span class="option-icon">🌐</span>
+                        <span>2. DNS Configuration</span>
+                    </div>
+                    <span class="option-arrow">→</span>
+                </a>
+                <a href="https://khoindvn.io.vn/" class="modal-option-btn" download>
+                    <div class="option-label">
+                        <span class="option-icon">🔐</span>
+                        <span>3. Ksign Certificate</span>
+                    </div>
+                    <span class="option-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <div class="top-bar">
@@ -511,12 +732,12 @@
                 <div class="platform-tag">iOS Platform</div>
                 <div class="card-icon">📱</div>
                 <div class="card-title" data-text="Delta iOS">Delta iOS</div>
-                <div class="card-size loading" data-url="https://download2440.mediafire.com/fe9o07ivjlbgrwhPKOd-ZEftX4TX2r0VW8sSTVq5GcaoqeGXTatWSTpKhi7K7AbRjjHdlKK5IRE-u562-5gGDR_dO-XK0yExtJMVN30ndr5Jyhn1H4Zg_b82lrGxB8T5naaZpYvyh72OK0_8DJ1nO5jJSC1PxhuYYlGUzJJSdRU/ciclpeq8z40hpru/Delta-2.704.1059+2.ipa">
+                <div class="card-size loading" data-url="https://cdn.gloopup.net/file/Delta-2.705.924.ipa">
                     <span class="spinner"></span> กำลังสแกน...
                 </div>
-                <a href="https://download2440.mediafire.com/fe9o07ivjlbgrwhPKOd-ZEftX4TX2r0VW8sSTVq5GcaoqeGXTatWSTpKhi7K7AbRjjHdlKK5IRE-u562-5gGDR_dO-XK0yExtJMVN30ndr5Jyhn1H4Zg_b82lrGxB8T5naaZpYvyh72OK0_8DJ1nO5jJSC1PxhuYYlGUzJJSdRU/ciclpeq8z40hpru/Delta-2.704.1059+2.ipa" class="download-btn" download>
+                <button class="download-btn" onclick="openModal()">
                     ⬇ Download
-                </a>
+                </button>
             </div>
 
             <!-- Card 2: Delta Android -->
@@ -527,7 +748,7 @@
                 <div class="card-size loading" data-url="https://download2437.mediafire.com/yhkh7t9zu6kgjBeAi6sV1L7DZ61p9XoA_US7DNP7-gmNPsYTL2TBg94LXvVbOVCkngbTO5TmBI-cLlOmI_JCcMGobQf-ivLqzllm2SQcIK6BVbTmZaEEYXygOh1W-poCexYWUePJ1gr6GDLL4tn02v33feuBYu1T84OO55f2Qqg/p8n1e0yj18yb358/Delta-2.704.1060-02.apk">
                     <span class="spinner"></span> กำลังสแกน...
                 </div>
-                <a href="https://download2437.mediafire.com/yhkh7t9zu6kgjBeAi6sV1L7DZ61p9XoA_US7DNP7-gmNPsYTL2TBg94LXvVbOVCkngbTO5TmBI-cLlOmI_JCcMGobQf-ivLqzllm2SQcIK6BVbTmZaEEYXygOh1W-poCexYWUePJ1gr6GDLL4tn02v33feuBYu1T84OO55f2Qqg/p8n1e0yj18yb358/Delta-2.704.1060-02.apk" class="download-btn" download>
+                <a href="https://www.mediafire.com/file/xfevmzbuvc1mndq/Delta-2.705.942.apk/file" class="download-btn" download>
                     ⬇ Download
                 </a>
             </div>
@@ -540,7 +761,7 @@
                 <div class="card-size loading" data-url="https://download2367.mediafire.com/j53szxk36bsgTZDscoExCpkyb0l65FEEsnowdPzxb8rPbGQpHgFnttJZc6KQsZGUtAjI20Lgt063RYBTpB8SAKt599b60F64MijcjOQSepGosur44VAyXUA6e1S7ZCvpzJt6qaGp0CL9EMBfZnHxQK4MMu8fAuBKhoWzMcWS81s/wlmy18r40fve1vc/Xeno-v1.3.20.zip">
                     <span class="spinner"></span> กำลังสแกน...
                 </div>
-                <a href="https://download2367.mediafire.com/j53szxk36bsgTZDscoExCpkyb0l65FEEsnowdPzxb8rPbGQpHgFnttJZc6KQsZGUtAjI20Lgt063RYBTpB8SAKt599b60F64MijcjOQSepGosur44VAyXUA6e1S7ZCvpzJt6qaGp0CL9EMBfZnHxQK4MMu8fAuBKhoWzMcWS81s/wlmy18r40fve1vc/Xeno-v1.3.20.zip" class="download-btn" download>
+                <a href="https://www.mediafire.com/file/8euymxw95ffe0tq/Xeno-v1.3.20.zip/file" class="download-btn" download>
                     ⬇ Download
                 </a>
             </div>
@@ -555,6 +776,29 @@
     </div>
 
     <script>
+        // Modal functions
+        function openModal() {
+            document.getElementById('iosModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('iosModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('iosModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // ฟังก์ชันแปลงขนาดไฟล์เป็นรูปแบบที่อ่านง่าย
         function formatBytes(bytes) {
             if (bytes === 0) return '0 Bytes';
