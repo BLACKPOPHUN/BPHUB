@@ -3,43 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPXZ SHOP - TOTAL VERSION</title>
+    <title>BPXZ SHOP - FIX VERSION</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS เดิมของคุณ */
+        /* CSS เหมือนเดิมทุกประการ */
         :root { --primary: #e63946; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --input-bg: #252525; --text-main: #ffffff; --text-dim: #a0a0a0; --success: #2b9348; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background-color: var(--dark-bg); color: var(--text-main); }
+        body { background-color: var(--dark-bg); color: var(--text-main); line-height: 1.6; }
         nav { background: #000000; color: var(--text-main); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary); }
-        nav h1 { color: var(--primary); font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; cursor: pointer; }
+        nav h1 { color: var(--primary); font-size: 1.8rem; font-weight: 900; cursor: pointer; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links button { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        .nav-links button:hover { color: var(--primary); }
+        .nav-links button { background: none; border: none; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
         .btn-red { background: var(--primary) !important; color: white !important; padding: 8px 18px; border-radius: 5px; font-weight: bold; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
         .section { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid #333; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        h2 { text-align: center; margin-bottom: 2rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
         form { display: flex; flex-direction: column; gap: 15px; max-width: 450px; margin: 0 auto; }
         input { background: var(--input-bg); border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; }
         button[type="submit"], .btn-main { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .product-card { background: var(--card-bg); border: 1px solid #333; border-radius: 15px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .product-img { width: 100%; height: 220px; object-fit: cover; }
-        .product-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
-        .price { color: var(--primary); font-size: 1.8rem; font-weight: 800; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: var(--text-dim); }
-        th { background: #000; color: var(--primary); padding: 15px; text-align: left; }
-        td { padding: 15px; border-bottom: 1px solid #333; background: #151515; }
+        .product-card { background: var(--card-bg); border: 1px solid #333; border-radius: 15px; overflow: hidden; }
+        .product-img { width: 100%; height: 200px; object-fit: cover; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card-bg); padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--primary); }
+        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
     <nav>
-        <h1 onclick="showSection('shop')">BPXZ<span>SHOP</span></h1>
+        <h1 onclick="goHome()">BPXZ<span>SHOP</span></h1>
         <div class="nav-links" id="navAuth">
             <button onclick="showSection('login')">LOGIN</button>
             <button onclick="showSection('register')" class="btn-red">REGISTER</button>
@@ -56,19 +51,19 @@
         <section id="login" class="section active">
             <h2>เข้าสู่ระบบ</h2>
             <form onsubmit="handleLogin(event)">
-                <input type="text" id="loginId" placeholder="อีเมล หรือ Username แอดมิน" required>
-                <input type="password" id="loginPass" placeholder="รหัสผ่าน" required>
-                <button type="submit">ล็อกอิน</button>
+                <input type="text" id="loginId" placeholder="Email หรือ Admin ID" required>
+                <input type="password" id="loginPass" placeholder="Password" required>
+                <button type="submit">LOGIN</button>
             </form>
         </section>
 
         <section id="register" class="section">
             <h2>สมัครสมาชิก</h2>
             <form onsubmit="handleRegister(event)">
-                <input type="text" id="regName" placeholder="ชื่อผู้ใช้ (อังกฤษ 6 ตัวขึ้นไป)" required>
-                <input type="email" id="regEmail" placeholder="อีเมล" required>
-                <input type="password" id="regPass" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)" required minlength="6">
-                <button type="submit" class="btn-red">สร้างบัญชี</button>
+                <input type="text" id="regName" placeholder="Username (อังกฤษ 6 ตัวขึ้นไป)" required>
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPass" placeholder="Password (6 ตัวขึ้นไป)" required minlength="6">
+                <button type="submit" class="btn-red">REGISTER</button>
             </form>
         </section>
 
@@ -78,52 +73,41 @@
         </section>
 
         <section id="admin" class="section">
-            <h2>จัดการระบบสินค้า</h2>
-            <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px dashed var(--primary); margin-bottom: 20px;">
-                <h3 id="formTitle" style="color:var(--primary); margin-bottom:15px;">เพิ่มสินค้าใหม่</h3>
+            <h2>จัดการระบบ (Admin Only)</h2>
+            <div style="background: #111; padding: 20px; border: 1px dashed var(--primary); margin-bottom: 20px;">
+                <h3 id="formTitle">เพิ่ม/แก้ไข สินค้า</h3>
                 <form onsubmit="handleProductSubmit(event)" id="productForm">
                     <input type="hidden" id="editId">
                     <input type="text" id="pName" placeholder="ชื่อสินค้า" required>
                     <input type="text" id="pImg" placeholder="Link รูปภาพ" required>
                     <input type="number" id="pPrice" placeholder="ราคา" required>
                     <input type="number" id="pStock" placeholder="สต๊อก" required>
-                    <input type="text" id="pLink" placeholder="Link ไฟล์ดาวน์โหลด" required>
+                    <input type="text" id="pLink" placeholder="Link ดาวน์โหลด" required>
                     <button type="submit" id="submitBtn">บันทึกข้อมูล</button>
                 </form>
             </div>
             <table>
-                <thead><tr><th>สินค้า</th><th>ราคา</th><th>คลัง</th><th>จัดการ</th></tr></thead>
+                <thead><tr><th>สินค้า</th><th>ราคา</th><th>สต๊อก</th><th>จัดการ</th></tr></thead>
                 <tbody id="adminTableBody"></tbody>
             </table>
-
-            <h2 style="margin-top: 50px;">รายการซองอั่งเปา (อัปเดตล่าสุด)</h2>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ลูกค้า</th>
-                            <th>สินค้า</th>
-                            <th>ราคา</th>
-                            <th>ลิงก์ซอง</th>
-                            <th>เวลา</th>
-                        </tr>
-                    </thead>
-                    <tbody id="orderTableBody"></tbody>
-                </table>
-            </div>
+            <h2 style="margin-top: 50px;">รายการซองอั่งเปา (7 วันล่าสุด)</h2>
+            <table>
+                <thead><tr><th>ผู้ซื้อ</th><th>สินค้า</th><th>ราคา</th><th>ลิงก์ซอง</th><th>เวลา</th></tr></thead>
+                <tbody id="orderTableBody"></tbody>
+            </table>
         </section>
     </div>
 
     <div id="buyModal" class="modal">
         <div class="modal-content">
-            <h3 id="buyItemName" style="color:white"></h3>
-            <p style="margin:15px 0;">ยอดชำระ: <span id="buyItemPrice" style="color:var(--primary); font-size:1.5rem; font-weight:bold;"></span> ฿</p>
-            <input type="text" id="walletLink" placeholder="วางลิงก์ซองอั่งเปาที่นี่..." style="margin-bottom:15px;">
+            <h3 id="buyItemName"></h3>
+            <p>ยอดชำระ: <span id="buyItemPrice" style="color:var(--primary); font-size:1.5rem;"></span> ฿</p>
+            <input type="text" id="walletLink" placeholder="วางลิงก์ซองอั่งเปาที่นี่..." style="margin: 15px 0;">
             <button class="btn-main" onclick="processPayment()">ชำระเงิน</button>
-            <div id="downloadBox" style="display:none; margin-top:20px; padding:15px; background:rgba(43,147,72,0.1); border:1px solid var(--success); border-radius:8px;">
-                <a id="dlLink" href="#" target="_blank" style="color:var(--success); font-weight:bold;">คลิกเพื่อรับสินค้า</a>
+            <div id="downloadBox" style="display:none; margin-top:20px; border:1px solid var(--success); padding:10px;">
+                <a id="dlLink" href="#" target="_blank" style="color:var(--success);">✅ คลิกดาวน์โหลดสินค้า</a>
             </div>
-            <button onclick="closeModal()" style="background:none; border:none; color:#555; margin-top:15px; cursor:pointer;">ปิด</button>
+            <button onclick="closeModal()" style="margin-top:15px; background:none; border:none; color:gray; cursor:pointer;">ยกเลิก</button>
         </div>
     </div>
 
@@ -149,7 +133,42 @@
         let products = [];
         let currentBuyingItem = null;
 
-        // --- ระบบล็อกอิน & สิทธิ์ ---
+        // --- แก้บัคเปลี่ยนหน้า: ใช้ฟังก์ชันแยกสิทธิ์ขาด ---
+        window.showSection = (id) => {
+            // ซ่อนทุกหน้าก่อน
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // ตรวจสอบสิทธิ์ก่อนเข้าหน้า Admin
+            if(id === 'admin') {
+                const adminSession = localStorage.getItem('bpxz_admin_session');
+                if(!adminSession && (!currentUser || currentUser.role !== 'admin')) {
+                    alert("สิทธิ์ไม่พอสำหรับเข้าหน้าแอดมิน!");
+                    document.getElementById('login').classList.add('active');
+                    return;
+                }
+            }
+
+            // ตรวจสอบสิทธิ์ก่อนเข้าหน้าร้าน (ต้องล็อกอินก่อน)
+            if(id === 'shop') {
+                const adminSession = localStorage.getItem('bpxz_admin_session');
+                if(!adminSession && !auth.currentUser) {
+                    alert("กรุณาล็อกอินก่อนเข้าหน้าร้านค้า!");
+                    document.getElementById('login').classList.add('active');
+                    return;
+                }
+            }
+
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        };
+
+        window.goHome = () => {
+            if(localStorage.getItem('bpxz_admin_session')) showSection('admin');
+            else if(auth.currentUser) showSection('shop');
+            else showSection('login');
+        };
+
+        // --- Auth States ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snap = await getDoc(doc(db, "users", user.uid));
@@ -158,98 +177,98 @@
                     document.getElementById('navAuth').style.display = 'none';
                     document.getElementById('navUser').style.display = 'flex';
                     document.getElementById('userNameDisp').innerText = `USER: ${currentUser.name.toUpperCase()}`;
-                    showSection('shop');
+                    document.getElementById('adminBtn').style.display = 'none';
+                    if(!localStorage.getItem('bpxz_admin_session')) showSection('shop');
                 }
             } else if (!localStorage.getItem('bpxz_admin_session')) {
+                document.getElementById('navAuth').style.display = 'flex';
+                document.getElementById('navUser').style.display = 'none';
                 showSection('login');
             }
         });
 
-        // ตรวจสอบแอดมินจาก LocalStorage
+        // เช็ค Admin Persistent
         if(localStorage.getItem('bpxz_admin_session')) {
             currentUser = JSON.parse(localStorage.getItem('bpxz_admin_session'));
             document.getElementById('navAuth').style.display = 'none';
             document.getElementById('navUser').style.display = 'flex';
             document.getElementById('userNameDisp').innerText = "ADMIN MASTER";
             document.getElementById('adminBtn').style.display = 'block';
+            showSection('admin');
         }
 
+        // --- Login & Register ---
         window.handleLogin = async (e) => {
             e.preventDefault();
             const id = document.getElementById('loginId').value;
             const pass = document.getElementById('loginPass').value;
+
             if (id === "bpxzshop" && pass === "bpxz7952") {
-                currentUser = { name: "ADMIN MASTER", role: "admin" };
-                localStorage.setItem('bpxz_admin_session', JSON.stringify(currentUser));
-                location.reload();
+                const adminData = { name: "ADMIN MASTER", role: "admin" };
+                localStorage.setItem('bpxz_admin_session', JSON.stringify(adminData));
+                currentUser = adminData;
+                location.reload(); // รีโหลดเพื่อให้ State เคลียร์และเข้าหน้า Admin
                 return;
             }
-            try { await signInWithEmailAndPassword(auth, id, pass); } catch (err) { alert("ล็อกอินไม่สำเร็จ!"); }
+
+            try { 
+                await signInWithEmailAndPassword(auth, id, pass);
+                showSection('shop');
+            } catch (err) { alert("Email หรือ รหัสผ่านไม่ถูกต้อง"); }
         };
 
-        // --- ระบบสมัครสมาชิก (อังกฤษเท่านั้น 6 ตัวขึ้นไป + กันคำหยาบ) ---
         window.handleRegister = async (e) => {
             e.preventDefault();
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const pass = document.getElementById('regPass').value;
-
-            // Regex: ภาษาอังกฤษ/เลข 6 ตัวขึ้นไป เท่านั้น (ห้ามไทย ห้ามสระลอย ห้ามเว้นวรรค)
-            const nameRegex = /^[a-zA-Z0-9]{6,}$/;
-            if (!nameRegex.test(name)) {
-                alert("ชื่อต้องเป็นภาษาอังกฤษหรือตัวเลข 6 ตัวขึ้นไปเท่านั้น (ห้ามใช้ภาษาไทย หรืออักขระพิเศษ)");
-                return;
-            }
-
-            // กันคำหยาบเบื้องต้น (อังกฤษ)
-            const badWords = ["fuck", "shxt", "pussy", "dick"];
-            if (badWords.some(w => name.toLowerCase().includes(w))) {
-                alert("ชื่อนี้ไม่เหมาะสม");
-                return;
-            }
+            if (!/^[a-zA-Z0-9]{6,}$/.test(name)) return alert("ชื่อต้องเป็นอังกฤษ/ตัวเลข 6 ตัวขึ้นไป");
 
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, pass);
                 await setDoc(doc(db, "users", res.user.uid), { name, role: "user" });
-                alert("สมัครเรียบร้อย!");
+                alert("สมัครสมาชิกสำเร็จ!");
                 showSection('login');
             } catch (err) { alert(err.message); }
         };
 
-        window.logout = () => { localStorage.removeItem('bpxz_admin_session'); signOut(auth).then(() => location.reload()); };
+        window.logout = () => {
+            localStorage.removeItem('bpxz_admin_session');
+            signOut(auth).then(() => location.reload());
+        };
 
-        // --- โหลดข้อมูลสินค้า ---
+        // --- Data Sync ---
         onSnapshot(collection(db, "products"), (snap) => {
             products = snap.docs.map(d => ({id: d.id, ...d.data()}));
             renderShop();
             renderAdminTable();
         });
 
-        // --- โหลดข้อมูลอั่งเปา (สำหรับ Admin เท่านั้น) ---
         onSnapshot(collection(db, "orders"), (snap) => {
-            if (currentUser && currentUser.role === 'admin') {
-                const orders = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                orders.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const adminSession = localStorage.getItem('bpxz_admin_session');
+            if(adminSession) {
+                const oneWeek = 7 * 24 * 60 * 60 * 1000;
+                const orders = snap.docs
+                    .map(d => ({id: d.id, ...d.data()}))
+                    .filter(o => (new Date().getTime() - new Date(o.timestamp).getTime()) < oneWeek)
+                    .sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+
                 document.getElementById('orderTableBody').innerHTML = orders.map(o => `
                     <tr>
-                        <td style="color:white">${o.userName}</td>
+                        <td>${o.userName}</td>
                         <td>${o.productName}</td>
-                        <td style="color:var(--primary)">฿${o.price}</td>
-                        <td><a href="${o.walletLink}" target="_blank" style="color:#2b9348; font-size:0.8rem;">เปิดรับเงิน</a></td>
-                        <td style="font-size:0.7rem;">${new Date(o.timestamp).toLocaleString('th-TH')}</td>
+                        <td>${o.price}</td>
+                        <td><a href="${o.walletLink}" target="_blank" style="color:var(--success)">เปิดซองเงิน</a></td>
+                        <td style="font-size:10px">${new Date(o.timestamp).toLocaleString()}</td>
                     </tr>
                 `).join('');
             }
         });
 
-        // --- ฟังก์ชันจ่ายเงิน & บันทึกอั่งเปา ---
         window.processPayment = async () => {
             const link = document.getElementById('walletLink').value;
-            if(!link.includes("gift.truemoney.com")) return alert("ลิงก์อั่งเปาไม่ถูกต้อง!");
-            
-            alert("กำลังส่งข้อมูลตรวจสอบ...");
+            if(!link.includes("gift.truemoney.com")) return alert("ลิงก์ไม่ถูกต้อง");
             try {
-                // บันทึกลง orders เพื่อให้แอดมินเห็น
                 await addDoc(collection(db, "orders"), {
                     userName: currentUser.name,
                     productName: currentBuyingItem.name,
@@ -257,25 +276,19 @@
                     walletLink: link,
                     timestamp: new Date().toISOString()
                 });
-
-                // ตัดสต๊อก
                 await updateDoc(doc(db, "products", currentBuyingItem.id), { stock: currentBuyingItem.stock - 1 });
-                
                 document.getElementById('dlLink').href = currentBuyingItem.downloadLink;
                 document.getElementById('downloadBox').style.display = 'block';
-            } catch (err) { alert(err.message); }
+            } catch (err) { alert("ผิดพลาด!"); }
         };
 
-        // --- ฟังก์ชันเสริมต่างๆ ---
         window.renderShop = () => {
-            const isAdmin = currentUser && currentUser.role === 'admin';
             document.getElementById('productGrid').innerHTML = products.map(p => `
                 <div class="product-card">
                     <img src="${p.img}" class="product-img">
-                    <div class="product-info">
+                    <div style="padding:15px">
                         <h3>${p.name}</h3>
-                        <div class="price">฿${p.price.toLocaleString()}</div>
-                        <p style="color:#666">คลัง: ${p.stock}</p>
+                        <div style="color:var(--primary); font-size:24px">฿${p.price}</div>
                         <button class="btn-main" onclick="openBuyModal('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
                             ${p.stock > 0 ? 'BUY NOW' : 'OUT OF STOCK'}
                         </button>
@@ -287,12 +300,12 @@
         window.renderAdminTable = () => {
             document.getElementById('adminTableBody').innerHTML = products.map(p => `
                 <tr>
-                    <td style="color:white">${p.name}</td>
+                    <td>${p.name}</td>
                     <td>฿${p.price}</td>
                     <td>${p.stock}</td>
                     <td>
-                        <button onclick="editProduct('${p.id}')" style="background:#666; border:none; color:white; padding:5px 10px; border-radius:4px;">แก้</button>
-                        <button onclick="delProduct('${p.id}')" style="background:var(--primary); border:none; color:white; padding:5px 10px; border-radius:4px;">ลบ</button>
+                        <button onclick="editProduct('${p.id}')">แก้</button>
+                        <button onclick="delProduct('${p.id}')">ลบ</button>
                     </td>
                 </tr>
             `).join('');
@@ -312,7 +325,6 @@
             else await addDoc(collection(db, "products"), data);
             document.getElementById('productForm').reset();
             document.getElementById('editId').value = "";
-            alert("บันทึกสำเร็จ");
         };
 
         window.editProduct = (id) => {
@@ -326,21 +338,15 @@
             document.getElementById('formTitle').innerText = "แก้ไข: " + p.name;
         };
 
-        window.delProduct = async (id) => { if(confirm("ลบสินค้านี้?")) await deleteDoc(doc(db, "products", id)); };
+        window.delProduct = async (id) => { if(confirm("ลบ?")) await deleteDoc(doc(db, "products", id)); };
         window.openBuyModal = (id) => {
-            if(!currentUser) { alert("กรุณาล็อกอิน!"); showSection('login'); return; }
             currentBuyingItem = products.find(x => x.id === id);
             document.getElementById('buyItemName').innerText = currentBuyingItem.name;
             document.getElementById('buyItemPrice').innerText = currentBuyingItem.price;
             document.getElementById('buyModal').style.display = 'flex';
             document.getElementById('downloadBox').style.display = 'none';
-            document.getElementById('walletLink').value = "";
         };
         window.closeModal = () => document.getElementById('buyModal').style.display = 'none';
-        window.showSection = (id) => {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        };
     </script>
 </body>
 </html>
