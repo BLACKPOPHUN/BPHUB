@@ -3,61 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BPXZ SHOP</title>
+    <title>BPXZ SHOP - TOTAL VERSION</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS Design: Black, Red, Gray --- */
-        :root { 
-            --primary: #e63946; 
-            --dark-bg: #0f0f0f; 
-            --card-bg: #1a1a1a;
-            --input-bg: #252525;
-            --text-main: #ffffff;
-            --text-dim: #a0a0a0;
-            --success: #2b9348; 
-        }
-
+        /* CSS เดิมของคุณ */
+        :root { --primary: #e63946; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --input-bg: #252525; --text-main: #ffffff; --text-dim: #a0a0a0; --success: #2b9348; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
         body { background-color: var(--dark-bg); color: var(--text-main); }
-
-        /* Navbar */
         nav { background: #000000; color: var(--text-main); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary); }
-        nav h1 { color: var(--primary); font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; cursor: pointer; text-shadow: 0 0 10px rgba(230, 57, 70, 0.5); }
+        nav h1 { color: var(--primary); font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; cursor: pointer; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
         .nav-links button { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem; transition: 0.3s; }
         .nav-links button:hover { color: var(--primary); }
-        .btn-red { background: var(--primary) !important; color: white !important; padding: 8px 18px; border-radius: 5px; font-weight: bold; box-shadow: 0 0 15px rgba(230, 57, 70, 0.3); }
-
-        /* Container & Sections */
+        .btn-red { background: var(--primary) !important; color: white !important; padding: 8px 18px; border-radius: 5px; font-weight: bold; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
         .section { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid #333; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Forms */
-        h2 { text-align: center; margin-bottom: 2rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+        h2 { text-align: center; margin-bottom: 2rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
         form { display: flex; flex-direction: column; gap: 15px; max-width: 450px; margin: 0 auto; }
-        input { background: var(--input-bg); border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; font-size: 1rem; width: 100%; transition: 0.3s; }
-        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 10px rgba(230, 57, 70, 0.2); }
-        button[type="submit"], .btn-main { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.3s; }
-        button[type="submit"]:hover { filter: brightness(1.2); transform: translateY(-2px); }
-
-        /* Product Cards */
+        input { background: var(--input-bg); border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; }
+        button[type="submit"], .btn-main { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         .product-card { background: var(--card-bg); border: 1px solid #333; border-radius: 15px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .product-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .product-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid #333; }
+        .product-img { width: 100%; height: 220px; object-fit: cover; }
         .product-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
         .price { color: var(--primary); font-size: 1.8rem; font-weight: 800; }
-        .stock-info { color: var(--text-dim); font-size: 0.9rem; }
-
-        /* Admin Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: var(--text-dim); border-radius: 8px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: var(--text-dim); }
         th { background: #000; color: var(--primary); padding: 15px; text-align: left; }
         td { padding: 15px; border-bottom: 1px solid #333; background: #151515; }
-        .btn-action { padding: 5px 12px; border-radius: 4px; border: none; cursor: pointer; color: white; font-size: 0.8rem; }
-
-        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { background: var(--card-bg); padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--primary); }
     </style>
@@ -91,10 +65,10 @@
         <section id="register" class="section">
             <h2>สมัครสมาชิก</h2>
             <form onsubmit="handleRegister(event)">
-                <input type="text" id="regName" placeholder="ชื่อเรียกของคุณ" required>
+                <input type="text" id="regName" placeholder="ชื่อผู้ใช้ (อังกฤษ 6 ตัวขึ้นไป)" required>
                 <input type="email" id="regEmail" placeholder="อีเมล" required>
                 <input type="password" id="regPass" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)" required minlength="6">
-                <button type="submit" class="btn-red">สร้างบัญชี (ไม่ต้องยืนยันเมล)</button>
+                <button type="submit" class="btn-red">สร้างบัญชี</button>
             </form>
         </section>
 
@@ -104,7 +78,7 @@
         </section>
 
         <section id="admin" class="section">
-            <h2>จัดการระบบ</h2>
+            <h2>จัดการระบบสินค้า</h2>
             <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px dashed var(--primary); margin-bottom: 20px;">
                 <h3 id="formTitle" style="color:var(--primary); margin-bottom:15px;">เพิ่มสินค้าใหม่</h3>
                 <form onsubmit="handleProductSubmit(event)" id="productForm">
@@ -121,6 +95,22 @@
                 <thead><tr><th>สินค้า</th><th>ราคา</th><th>คลัง</th><th>จัดการ</th></tr></thead>
                 <tbody id="adminTableBody"></tbody>
             </table>
+
+            <h2 style="margin-top: 50px;">รายการซองอั่งเปา (อัปเดตล่าสุด)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ลูกค้า</th>
+                            <th>สินค้า</th>
+                            <th>ราคา</th>
+                            <th>ลิงก์ซอง</th>
+                            <th>เวลา</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderTableBody"></tbody>
+                </table>
+            </div>
         </section>
     </div>
 
@@ -129,7 +119,7 @@
             <h3 id="buyItemName" style="color:white"></h3>
             <p style="margin:15px 0;">ยอดชำระ: <span id="buyItemPrice" style="color:var(--primary); font-size:1.5rem; font-weight:bold;"></span> ฿</p>
             <input type="text" id="walletLink" placeholder="วางลิงก์ซองอั่งเปาที่นี่..." style="margin-bottom:15px;">
-            <button class="btn-main" style="width:100%" onclick="processPayment()">ชำระเงิน</button>
+            <button class="btn-main" onclick="processPayment()">ชำระเงิน</button>
             <div id="downloadBox" style="display:none; margin-top:20px; padding:15px; background:rgba(43,147,72,0.1); border:1px solid var(--success); border-radius:8px;">
                 <a id="dlLink" href="#" target="_blank" style="color:var(--success); font-weight:bold;">คลิกเพื่อรับสินค้า</a>
             </div>
@@ -159,21 +149,12 @@
         let products = [];
         let currentBuyingItem = null;
 
-        // --- ระบบจำการล็อกอิน ---
-        function checkPersistentAdmin() {
-            const saved = localStorage.getItem('bpxz_admin_session');
-            if (saved) {
-                currentUser = JSON.parse(saved);
-                applyAdminUI();
-            }
-        }
-
+        // --- ระบบล็อกอิน & สิทธิ์ ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snap = await getDoc(doc(db, "users", user.uid));
                 if (snap.exists()) {
                     currentUser = snap.data();
-                    localStorage.removeItem('bpxz_admin_session');
                     document.getElementById('navAuth').style.display = 'none';
                     document.getElementById('navUser').style.display = 'flex';
                     document.getElementById('userNameDisp').innerText = `USER: ${currentUser.name.toUpperCase()}`;
@@ -184,51 +165,109 @@
             }
         });
 
+        // ตรวจสอบแอดมินจาก LocalStorage
+        if(localStorage.getItem('bpxz_admin_session')) {
+            currentUser = JSON.parse(localStorage.getItem('bpxz_admin_session'));
+            document.getElementById('navAuth').style.display = 'none';
+            document.getElementById('navUser').style.display = 'flex';
+            document.getElementById('userNameDisp').innerText = "ADMIN MASTER";
+            document.getElementById('adminBtn').style.display = 'block';
+        }
+
         window.handleLogin = async (e) => {
             e.preventDefault();
             const id = document.getElementById('loginId').value;
             const pass = document.getElementById('loginPass').value;
-
             if (id === "bpxzshop" && pass === "bpxz7952") {
                 currentUser = { name: "ADMIN MASTER", role: "admin" };
                 localStorage.setItem('bpxz_admin_session', JSON.stringify(currentUser));
-                applyAdminUI();
+                location.reload();
                 return;
             }
             try { await signInWithEmailAndPassword(auth, id, pass); } catch (err) { alert("ล็อกอินไม่สำเร็จ!"); }
         };
 
+        // --- ระบบสมัครสมาชิก (อังกฤษเท่านั้น 6 ตัวขึ้นไป + กันคำหยาบ) ---
         window.handleRegister = async (e) => {
             e.preventDefault();
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const pass = document.getElementById('regPass').value;
+
+            // Regex: ภาษาอังกฤษ/เลข 6 ตัวขึ้นไป เท่านั้น (ห้ามไทย ห้ามสระลอย ห้ามเว้นวรรค)
+            const nameRegex = /^[a-zA-Z0-9]{6,}$/;
+            if (!nameRegex.test(name)) {
+                alert("ชื่อต้องเป็นภาษาอังกฤษหรือตัวเลข 6 ตัวขึ้นไปเท่านั้น (ห้ามใช้ภาษาไทย หรืออักขระพิเศษ)");
+                return;
+            }
+
+            // กันคำหยาบเบื้องต้น (อังกฤษ)
+            const badWords = ["fuck", "shxt", "pussy", "dick"];
+            if (badWords.some(w => name.toLowerCase().includes(w))) {
+                alert("ชื่อนี้ไม่เหมาะสม");
+                return;
+            }
+
             try {
                 const res = await createUserWithEmailAndPassword(auth, email, pass);
                 await setDoc(doc(db, "users", res.user.uid), { name, role: "user" });
-                alert("สมัครเรียบร้อย! ล็อกอินได้ทันที");
+                alert("สมัครเรียบร้อย!");
                 showSection('login');
             } catch (err) { alert(err.message); }
         };
 
         window.logout = () => { localStorage.removeItem('bpxz_admin_session'); signOut(auth).then(() => location.reload()); };
 
-        function applyAdminUI() {
-            document.getElementById('navAuth').style.display = 'none';
-            document.getElementById('navUser').style.display = 'flex';
-            document.getElementById('userNameDisp').innerText = "แอดมินสูงสุด";
-            document.getElementById('adminBtn').style.display = 'block';
-            showSection('admin');
-        }
-
-        // --- ระบบจัดการสินค้า ---
+        // --- โหลดข้อมูลสินค้า ---
         onSnapshot(collection(db, "products"), (snap) => {
             products = snap.docs.map(d => ({id: d.id, ...d.data()}));
             renderShop();
             renderAdminTable();
         });
 
-        function renderShop() {
+        // --- โหลดข้อมูลอั่งเปา (สำหรับ Admin เท่านั้น) ---
+        onSnapshot(collection(db, "orders"), (snap) => {
+            if (currentUser && currentUser.role === 'admin') {
+                const orders = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                orders.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+                document.getElementById('orderTableBody').innerHTML = orders.map(o => `
+                    <tr>
+                        <td style="color:white">${o.userName}</td>
+                        <td>${o.productName}</td>
+                        <td style="color:var(--primary)">฿${o.price}</td>
+                        <td><a href="${o.walletLink}" target="_blank" style="color:#2b9348; font-size:0.8rem;">เปิดรับเงิน</a></td>
+                        <td style="font-size:0.7rem;">${new Date(o.timestamp).toLocaleString('th-TH')}</td>
+                    </tr>
+                `).join('');
+            }
+        });
+
+        // --- ฟังก์ชันจ่ายเงิน & บันทึกอั่งเปา ---
+        window.processPayment = async () => {
+            const link = document.getElementById('walletLink').value;
+            if(!link.includes("gift.truemoney.com")) return alert("ลิงก์อั่งเปาไม่ถูกต้อง!");
+            
+            alert("กำลังส่งข้อมูลตรวจสอบ...");
+            try {
+                // บันทึกลง orders เพื่อให้แอดมินเห็น
+                await addDoc(collection(db, "orders"), {
+                    userName: currentUser.name,
+                    productName: currentBuyingItem.name,
+                    price: currentBuyingItem.price,
+                    walletLink: link,
+                    timestamp: new Date().toISOString()
+                });
+
+                // ตัดสต๊อก
+                await updateDoc(doc(db, "products", currentBuyingItem.id), { stock: currentBuyingItem.stock - 1 });
+                
+                document.getElementById('dlLink').href = currentBuyingItem.downloadLink;
+                document.getElementById('downloadBox').style.display = 'block';
+            } catch (err) { alert(err.message); }
+        };
+
+        // --- ฟังก์ชันเสริมต่างๆ ---
+        window.renderShop = () => {
             const isAdmin = currentUser && currentUser.role === 'admin';
             document.getElementById('productGrid').innerHTML = products.map(p => `
                 <div class="product-card">
@@ -236,29 +275,28 @@
                     <div class="product-info">
                         <h3>${p.name}</h3>
                         <div class="price">฿${p.price.toLocaleString()}</div>
-                        <p class="stock-info">คลัง: ${p.stock}</p>
+                        <p style="color:#666">คลัง: ${p.stock}</p>
                         <button class="btn-main" onclick="openBuyModal('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
                             ${p.stock > 0 ? 'BUY NOW' : 'OUT OF STOCK'}
                         </button>
-                        ${isAdmin ? `<button onclick="editProduct('${p.id}'); showSection('admin');" style="background:#444; color:white; border:none; margin-top:5px; padding:5px; border-radius:5px; cursor:pointer; font-size:0.7rem;">แก้ไขข้อมูล</button>` : ''}
                     </div>
                 </div>
             `).join('');
-        }
+        };
 
-        function renderAdminTable() {
+        window.renderAdminTable = () => {
             document.getElementById('adminTableBody').innerHTML = products.map(p => `
                 <tr>
                     <td style="color:white">${p.name}</td>
                     <td>฿${p.price}</td>
                     <td>${p.stock}</td>
                     <td>
-                        <button class="btn-action" style="background:#666" onclick="editProduct('${p.id}')">แก้</button>
-                        <button class="btn-action" style="background:var(--primary)" onclick="delProduct('${p.id}')">ลบ</button>
+                        <button onclick="editProduct('${p.id}')" style="background:#666; border:none; color:white; padding:5px 10px; border-radius:4px;">แก้</button>
+                        <button onclick="delProduct('${p.id}')" style="background:var(--primary); border:none; color:white; padding:5px 10px; border-radius:4px;">ลบ</button>
                     </td>
                 </tr>
             `).join('');
-        }
+        };
 
         window.handleProductSubmit = async (e) => {
             e.preventDefault();
@@ -272,7 +310,9 @@
             };
             if(id) await updateDoc(doc(db, "products", id), data);
             else await addDoc(collection(db, "products"), data);
-            resetForm();
+            document.getElementById('productForm').reset();
+            document.getElementById('editId').value = "";
+            alert("บันทึกสำเร็จ");
         };
 
         window.editProduct = (id) => {
@@ -283,40 +323,24 @@
             document.getElementById('pPrice').value = p.price;
             document.getElementById('pStock').value = p.stock;
             document.getElementById('pLink').value = p.downloadLink;
-            document.getElementById('formTitle').innerText = "กำลังแก้ไข: " + p.name;
-            document.getElementById('submitBtn').innerText = "อัปเดต";
+            document.getElementById('formTitle').innerText = "แก้ไข: " + p.name;
         };
 
         window.delProduct = async (id) => { if(confirm("ลบสินค้านี้?")) await deleteDoc(doc(db, "products", id)); };
-        window.resetForm = () => { document.getElementById('productForm').reset(); document.getElementById('editId').value=""; document.getElementById('formTitle').innerText="เพิ่มสินค้าใหม่"; document.getElementById('submitBtn').innerText="บันทึกข้อมูล"; };
-
         window.openBuyModal = (id) => {
-            if(!currentUser) { alert("กรุณาล็อกอินก่อน!"); showSection('login'); return; }
+            if(!currentUser) { alert("กรุณาล็อกอิน!"); showSection('login'); return; }
             currentBuyingItem = products.find(x => x.id === id);
             document.getElementById('buyItemName').innerText = currentBuyingItem.name;
             document.getElementById('buyItemPrice').innerText = currentBuyingItem.price;
             document.getElementById('buyModal').style.display = 'flex';
             document.getElementById('downloadBox').style.display = 'none';
+            document.getElementById('walletLink').value = "";
         };
-
-        window.processPayment = async () => {
-            const link = document.getElementById('walletLink').value;
-            if(!link.includes("gift.truemoney.com")) return alert("ลิงก์อั่งเปาไม่ถูกต้อง!");
-            alert("กำลังตรวจสอบซอง...");
-            setTimeout(async () => {
-                await updateDoc(doc(db, "products", currentBuyingItem.id), { stock: currentBuyingItem.stock - 1 });
-                document.getElementById('dlLink').href = currentBuyingItem.downloadLink;
-                document.getElementById('downloadBox').style.display = 'block';
-            }, 1500);
-        };
-
         window.closeModal = () => document.getElementById('buyModal').style.display = 'none';
         window.showSection = (id) => {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
-
-        checkPersistentAdmin();
     </script>
 </body>
 </html>
