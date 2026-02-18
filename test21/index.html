@@ -3,158 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</title>
+    <title>BPXZ SHOP - FIX VERSION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background: #f0f2f5; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-            color: #333; 
-        }
-        /* --- แก้ไขตรงนี้ --- */
-        .container { 
-            text-align: center; 
-            background: #fff; 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            max-width: 700px; 
-            margin: 20px;
-            position: relative; /* เพิ่ม position */
-            z-index: 1;      /* กำหนดให้อยู่เลเยอร์ที่ 1 */
-        }
-        h1 { font-size: 2.5em; color: #1a237e; }
-        p { font-size: 1.2em; color: #555; }
-        .main-img { width: 100%; max-width: 600px; border: 5px solid #e0e0e0; border-radius: 10px; cursor: crosshair; margin-top: 20px; }
-        .btn { margin-top: 30px; padding: 20px 60px; font-size: 28px; background: linear-gradient(45deg, #1976d2, #2196f3); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .btn:disabled { background: #9e9e9e; cursor: not-allowed; transform: none; box-shadow: none; }
-        
-        #jumpscare { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; }
-        #jumpscare img { width: 100%; height: 100%; object-fit: cover; animation: intenseShake 0.1s infinite; }
-        @keyframes intenseShake {
-            0% { transform: scale(1.25) translate(15px, 10px) rotate(1deg); }
-            25% { transform: scale(1.25) translate(-10px, -15px) rotate(-1deg); }
-            50% { transform: scale(1.25) translate(10px, -10px) rotate(1deg); }
-            75% { transform: scale(1.25) translate(-15px, 10px) rotate(-1deg); }
-            100% { transform: scale(1.25) translate(15px, 15px) rotate(1deg); }
-        }
-
-        /* --- แก้ไขตรงนี้ --- */
-        #cookie-banner { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            background-color: rgba(30, 30, 30, 0.9); 
-            color: white; 
-            padding: 20px; 
-            text-align: center; 
-            z-index: 10000; /* กำหนดให้อยู่เลเยอร์ที่ 10000 (สูงที่สุด) */
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            backdrop-filter: blur(5px); 
-        }
-        #cookie-banner p { margin: 0 20px 0 0; font-size: 1em; }
-        #cookie-accept-btn { padding: 12px 25px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+        :root { --primary: #e63946; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --input-bg: #252525; --text-main: #ffffff; --text-dim: #a0a0a0; --success: #2b9348; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+        body { background-color: var(--dark-bg); color: var(--text-main); line-height: 1.6; }
+        nav { background: #000000; color: var(--text-main); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--primary); }
+        nav h1 { color: var(--primary); font-size: 1.8rem; font-weight: 900; cursor: pointer; }
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links button { background: none; border: none; color: var(--text-dim); cursor: pointer; transition: 0.3s; }
+        .btn-red { background: var(--primary) !important; color: white !important; padding: 8px 18px; border-radius: 5px; font-weight: bold; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .section { display: none; background: var(--card-bg); padding: 2.5rem; border-radius: 12px; border: 1px solid #333; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        form { display: flex; flex-direction: column; gap: 15px; max-width: 450px; margin: 0 auto; }
+        input { background: var(--input-bg); border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; }
+        button[type="submit"], .btn-main { background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: var(--card-bg); border: 1px solid #333; border-radius: 15px; overflow: hidden; }
+        .product-img { width: 100%; height: 200px; object-fit: cover; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card-bg); padding: 2rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--primary); }
+        #payBtn:disabled { background: #555 !important; cursor: not-allowed !important; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="ui">
-        <h1>โปรแกรมวิเคราะห์ความคลาดเคลื่อนของภาพ</h1>
-        <p>ระบบจะทำการสแกนพิกเซลเพื่อหาค่าความผิดปกติในภาพ  
-กรุณาจ้องที่จุดกึ่งกลางภาพแล้วกดปุ่มเพื่อเริ่ม</p>
-        <img src="https://images.pexels.com/photos/36717/amazing-animal-beautiful-beautifull.jpg" class="main-img">
-          
+    <nav>
+        <h1 onclick="goHome()">BPXZ<span>SHOP</span></h1>
+        <div class="nav-links" id="navAuth">
+            <button onclick="showSection('login')">LOGIN</button>
+            <button onclick="showSection('register')" class="btn-red">REGISTER</button>
+        </div>
+        <div class="nav-links" id="navUser" style="display: none;">
+            <span id="userNameDisp" style="color: var(--text-dim);"></span>
+            <button onclick="showSection('shop')">🛒 หน้าร้าน</button>
+            <button id="adminBtn" class="btn-red" style="display: none;" onclick="showSection('admin')">⚙️ แอดมิน</button>
+            <button onclick="logout()" style="color: var(--primary);">OFF</button>
+        </div>
+    </nav>
 
-        <button class="btn" onclick="startScare( )">เริ่มการวิเคราะห์</button>
+    <div class="container">
+        <section id="login" class="section active">
+            <h2>เข้าสู่ระบบ</h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="text" id="loginId" placeholder="Email หรือ Admin ID" required>
+                <input type="password" id="loginPass" placeholder="Password" required>
+                <button type="submit">LOGIN</button>
+            </form>
+        </section>
+
+        <section id="register" class="section">
+            <h2>สมัครสมาชิก</h2>
+            <form onsubmit="handleRegister(event)">
+                <input type="text" id="regName" placeholder="Username (อังกฤษ 6 ตัวขึ้นไป)" required>
+                <input type="email" id="regEmail" placeholder="Email" required>
+                <input type="password" id="regPass" placeholder="Password (6 ตัวขึ้นไป)" required minlength="6">
+                <button type="submit" class="btn-red">REGISTER</button>
+            </form>
+        </section>
+
+        <section id="shop" class="section">
+            <h2>รายการสินค้า</h2>
+            <div id="productGrid" class="product-grid"></div>
+        </section>
+
+        <section id="admin" class="section">
+            <h2>จัดการระบบ (Admin Only)</h2>
+            <div style="background: #111; padding: 20px; border: 1px dashed var(--primary); margin-bottom: 20px;">
+                <h3 id="formTitle">เพิ่ม/แก้ไข สินค้า</h3>
+                <form onsubmit="handleProductSubmit(event)" id="productForm">
+                    <input type="hidden" id="editId">
+                    <input type="text" id="pName" placeholder="ชื่อสินค้า" required>
+                    <input type="text" id="pImg" placeholder="Link รูปภาพ" required>
+                    <input type="number" id="pPrice" placeholder="ราคา" required>
+                    <input type="number" id="pStock" placeholder="สต๊อก" required>
+                    <input type="text" id="pLink" placeholder="Link ดาวน์โหลด" required>
+                    <button type="submit" id="submitBtn">บันทึกข้อมูล</button>
+                </form>
+            </div>
+            <table>
+                <thead><tr><th>สินค้า</th><th>ราคา</th><th>สต๊อก</th><th>จัดการ</th></tr></thead>
+                <tbody id="adminTableBody"></tbody>
+            </table>
+            <h2 style="margin-top: 50px;">รายการซองอั่งเปา (7 วันล่าสุด)</h2>
+            <table>
+                <thead><tr><th>ผู้ซื้อ</th><th>สินค้า</th><th>ราคา</th><th>ลิงก์ซอง</th><th>เวลา</th></tr></thead>
+                <tbody id="orderTableBody"></tbody>
+            </table>
+        </section>
     </div>
 
-    <div id="jumpscare">
-        <img src="https://i.pinimg.com/originals/5f/20/6a/5f206a34a2912b8ead03f384a788a4a5.jpg">
+    <!-- Modal ชำระเงิน -->
+    <div id="buyModal" class="modal">
+        <div class="modal-content">
+            <h3 id="buyItemName"></h3>
+            <p>ยอดที่ต้องชำระ: <span id="buyItemPrice" style="color:var(--primary); font-size:1.5rem; font-weight:bold;"></span> ฿</p>
+            <input type="text" id="walletLink" placeholder="วางลิงก์ซองอั่งเปาที่นี่..." style="margin:12px 0 8px;">
+            <input type="text" id="phoneNumber" placeholder="เบอร์มือถือที่ผูก TrueMoney (0812345678)" style="margin-bottom:12px;">
+            <button class="btn-main" onclick="verifyVoucher()" id="verifyBtn">🔍 ตรวจสอบซองเงิน</button>
+            <div id="verifyResult" style="display:none; margin:12px 0; padding:12px; border-radius:8px; font-size:0.95rem;"></div>
+            <button class="btn-main" onclick="processPayment()" id="payBtn" disabled>✅ ชำระเงิน</button>
+            <div id="downloadBox" style="display:none; margin-top:20px; border:1px solid var(--success); padding:12px; border-radius:8px;">
+                <p style="color:var(--success); margin-bottom:8px;">🎉 ชำระเงินสำเร็จ!</p>
+                <a id="dlLink" href="#" target="_blank" style="color:var(--success); font-weight:bold;">⬇️ คลิกดาวน์โหลดสินค้า</a>
+            </div>
+            <button onclick="closeModal()" style="margin-top:15px; background:none; border:none; color:gray; cursor:pointer;">ยกเลิก</button>
+        </div>
     </div>
 
-    <div id="cookie-banner">
-        <p>เว็บไซต์นี้จำเป็นต้องใช้คุกกี้เพื่อประมวลผลข้อมูลภาพ โปรดกดยอมรับเพื่อดำเนินการต่อ</p>
-        <button id="cookie-accept-btn">ยอมรับและดำเนินการต่อ</button>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, setDoc, getDoc, updateDoc, onSnapshot, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    <script>
-        // --- ส่วนของ Javascript ไม่มีการเปลี่ยนแปลง ---
-        const btn = document.querySelector('.btn' );
-        const cookieBanner = document.getElementById('cookie-banner');
-        const acceptCookieBtn = document.getElementById('cookie-accept-btn');
-        const audioUrl = 'https://www.myinstants.com/media/sounds/woman-scream-6331.mp3';
-        
-        let audioBuffer = null;
-        let audioCtx;
-        let isAudioUnlocked = false;
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkKUrj5pHqXUvHMI-JpGWqMwlitGe7b0c",
+            authDomain: "bpxzshop-2573c.firebaseapp.com",
+            projectId: "bpxzshop-2573c",
+            storageBucket: "bpxzshop-2573c.firebasestorage.app",
+            messagingSenderId: "51423151593",
+            appId: "1:51423151593:web:79c4e1c86fcf6340cff778"
+        };
 
-        async function setupAudio( ) {
-            if (isAudioUnlocked) return;
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const response = await fetch(audioUrl);
-                const arrayBuffer = await response.arrayBuffer();
-                audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-                isAudioUnlocked = true;
-            } catch (e) {
-                console.error("เกิดข้อผิดพลาดในการตั้งค่าเสียง:", e);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let products = [];
+        let currentBuyingItem = null;
+
+        // ==================== SECTION NAVIGATION ====================
+        window.showSection = (id) => {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+            if (id === 'admin') {
+                const adminSession = localStorage.getItem('bpxz_admin_session');
+                if (!adminSession && (!currentUser || currentUser.role !== 'admin')) {
+                    alert("สิทธิ์ไม่พอสำหรับเข้าหน้าแอดมิน!");
+                    document.getElementById('login').classList.add('active');
+                    return;
+                }
             }
+
+            if (id === 'shop') {
+                const adminSession = localStorage.getItem('bpxz_admin_session');
+                if (!adminSession && !auth.currentUser) {
+                    alert("กรุณาล็อกอินก่อนเข้าหน้าร้านค้า!");
+                    document.getElementById('login').classList.add('active');
+                    return;
+                }
+            }
+
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        };
+
+        window.goHome = () => {
+            if (localStorage.getItem('bpxz_admin_session')) showSection('admin');
+            else if (auth.currentUser) showSection('shop');
+            else showSection('login');
+        };
+
+        // ==================== AUTH ====================
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    currentUser = snap.data();
+                    document.getElementById('navAuth').style.display = 'none';
+                    document.getElementById('navUser').style.display = 'flex';
+                    document.getElementById('userNameDisp').innerText = `USER: ${currentUser.name.toUpperCase()}`;
+                    document.getElementById('adminBtn').style.display = 'none';
+                    if (!localStorage.getItem('bpxz_admin_session')) showSection('shop');
+                }
+            } else if (!localStorage.getItem('bpxz_admin_session')) {
+                document.getElementById('navAuth').style.display = 'flex';
+                document.getElementById('navUser').style.display = 'none';
+                showSection('login');
+            }
+        });
+
+        if (localStorage.getItem('bpxz_admin_session')) {
+            currentUser = JSON.parse(localStorage.getItem('bpxz_admin_session'));
+            document.getElementById('navAuth').style.display = 'none';
+            document.getElementById('navUser').style.display = 'flex';
+            document.getElementById('userNameDisp').innerText = "ADMIN MASTER";
+            document.getElementById('adminBtn').style.display = 'block';
+            showSection('admin');
         }
 
-        acceptCookieBtn.addEventListener('click', async () => {
-            if (audioCtx && audioCtx.state === 'suspended') {
-                await audioCtx.resume();
-            }
-            await setupAudio();
-            cookieBanner.style.display = 'none';
-        }, { once: true });
+        window.handleLogin = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('loginId').value;
+            const pass = document.getElementById('loginPass').value;
 
-        function playSound() {
-            if (!audioBuffer || !audioCtx) return;
-            const gainNode = audioCtx.createGain();
-            gainNode.gain.value = 3.0;
-            const source = audioCtx.createBufferSource();
-            source.buffer = audioBuffer;
-            source.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            source.start(0);
-        }
-
-        function startScare() {
-            if (!isAudioUnlocked) {
-                alert("เพื่อการประมวลผลที่สมบูรณ์ กรุณากดยอมรับนโยบายที่แถบด้านล่างก่อนครับ");
+            if (id === "bpxzshop" && pass === "bpxz7952") {
+                const adminData = { name: "ADMIN MASTER", role: "admin" };
+                localStorage.setItem('bpxz_admin_session', JSON.stringify(adminData));
+                currentUser = adminData;
+                location.reload();
                 return;
             }
 
-            btn.innerText = "กำลังประมวลผล... (0%)";
-            btn.disabled = true;
+            try {
+                await signInWithEmailAndPassword(auth, id, pass);
+                showSection('shop');
+            } catch (err) { alert("Email หรือ รหัสผ่านไม่ถูกต้อง"); }
+        };
 
-            let percent = 0;
-            const interval = setInterval(() => {
-                percent += 20;
-                btn.innerText = `กำลังประมวลผล... (${percent}%)`;
-                if (percent >= 100) clearInterval(interval);
-            }, 1000);
+        window.handleRegister = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            if (!/^[a-zA-Z0-9]{6,}$/.test(name)) return alert("ชื่อต้องเป็นอังกฤษ/ตัวเลข 6 ตัวขึ้นไป");
 
-            setTimeout(() => {
-                document.body.style.overflow = 'hidden';
-                document.getElementById('jumpscare').style.display = 'block';
-                playSound();
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                }
-            }, 5500);
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", res.user.uid), { name, role: "user" });
+                alert("สมัครสมาชิกสำเร็จ!");
+                showSection('login');
+            } catch (err) { alert(err.message); }
+        };
+
+        window.logout = () => {
+            localStorage.removeItem('bpxz_admin_session');
+            signOut(auth).then(() => location.reload());
+        };
+
+        // ==================== DATA SYNC ====================
+        onSnapshot(collection(db, "products"), (snap) => {
+            products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            renderShop();
+            renderAdminTable();
+        });
+
+        onSnapshot(collection(db, "orders"), (snap) => {
+            const adminSession = localStorage.getItem('bpxz_admin_session');
+            if (adminSession) {
+                const oneWeek = 7 * 24 * 60 * 60 * 1000;
+                const orders = snap.docs
+                    .map(d => ({ id: d.id, ...d.data() }))
+                    .filter(o => (new Date().getTime() - new Date(o.timestamp).getTime()) < oneWeek)
+                    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+                document.getElementById('orderTableBody').innerHTML = orders.map(o => `
+                    <tr>
+                        <td>${o.userName}</td>
+                        <td>${o.productName}</td>
+                        <td>${o.price}</td>
+                        <td><a href="${o.walletLink}" target="_blank" style="color:var(--success)">เปิดซองเงิน</a></td>
+                        <td style="font-size:10px">${new Date(o.timestamp).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            }
+        });
+
+        // ==================== SHOP RENDER ====================
+        window.renderShop = () => {
+            document.getElementById('productGrid').innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" class="product-img">
+                    <div style="padding:15px">
+                        <h3>${p.name}</h3>
+                        <div style="color:var(--primary); font-size:24px">฿${p.price}</div>
+                        <button class="btn-main" onclick="openBuyModal('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''}>
+                            ${p.stock > 0 ? 'BUY NOW' : 'OUT OF STOCK'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // ==================== ADMIN ====================
+        window.renderAdminTable = () => {
+            document.getElementById('adminTableBody').innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>฿${p.price}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        <button onclick="editProduct('${p.id}')">แก้</button>
+                        <button onclick="delProduct('${p.id}')">ลบ</button>
+                    </td>
+                </tr>
+            `).join('');
+        };
+
+        window.handleProductSubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            const data = {
+                name: document.getElementById('pName').value,
+                img: document.getElementById('pImg').value,
+                price: Number(document.getElementById('pPrice').value),
+                stock: Number(document.getElementById('pStock').value),
+                downloadLink: document.getElementById('pLink').value
+            };
+            if (id) await updateDoc(doc(db, "products", id), data);
+            else await addDoc(collection(db, "products"), data);
+            document.getElementById('productForm').reset();
+            document.getElementById('editId').value = "";
+            document.getElementById('formTitle').innerText = "เพิ่ม/แก้ไข สินค้า";
+        };
+
+        window.editProduct = (id) => {
+            const p = products.find(x => x.id === id);
+            document.getElementById('editId').value = p.id;
+            document.getElementById('pName').value = p.name;
+            document.getElementById('pImg').value = p.img;
+            document.getElementById('pPrice').value = p.price;
+            document.getElementById('pStock').value = p.stock;
+            document.getElementById('pLink').value = p.downloadLink;
+            document.getElementById('formTitle').innerText = "แก้ไข: " + p.name;
+        };
+
+        window.delProduct = async (id) => { if (confirm("ลบ?")) await deleteDoc(doc(db, "products", id)); };
+
+        // ==================== MODAL ====================
+        window.openBuyModal = (id) => {
+            currentBuyingItem = products.find(x => x.id === id);
+            document.getElementById('buyItemName').innerText = currentBuyingItem.name;
+            document.getElementById('buyItemPrice').innerText = currentBuyingItem.price;
+            document.getElementById('walletLink').value = '';
+            document.getElementById('phoneNumber').value = '';
+            document.getElementById('verifyResult').style.display = 'none';
+            document.getElementById('downloadBox').style.display = 'none';
+            document.getElementById('verifyBtn').style.display = 'block';
+            document.getElementById('verifyBtn').innerText = '🔍 ตรวจสอบซองเงิน';
+            document.getElementById('verifyBtn').disabled = false;
+            document.getElementById('payBtn').style.display = 'block';
+            document.getElementById('payBtn').disabled = true;
+            document.getElementById('buyModal').style.display = 'flex';
+        };
+
+        window.closeModal = () => document.getElementById('buyModal').style.display = 'none';
+
+        // ==================== VERIFY VOUCHER ====================
+        function showVerifyResult(type, msg) {
+            const box = document.getElementById('verifyResult');
+            box.style.display = 'block';
+            box.style.background = type === 'success' ? '#1a3a1a' : '#3a1a1a';
+            box.style.border = `1px solid ${type === 'success' ? 'var(--success)' : 'var(--primary)'}`;
+            box.style.color = type === 'success' ? '#4caf50' : '#ff6b6b';
+            box.innerHTML = msg;
         }
+
+        window.verifyVoucher = async () => {
+            const link = document.getElementById('walletLink').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const payBtn = document.getElementById('payBtn');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            // Validate ลิงก์
+            if (!link.includes("gift.truemoney.com")) {
+                return showVerifyResult('error', '❌ ลิงก์ไม่ใช่ซองอั่งเปา TrueMoney');
+            }
+            // Validate เบอร์
+            if (!/^0[0-9]{9}$/.test(phone)) {
+                return showVerifyResult('error', '❌ กรุณากรอกเบอร์มือถือให้ถูกต้อง (10 หลัก)');
+            }
+
+            // ดึง hash จาก URL
+            const hashMatch = link.match(/vouchers?\/([a-zA-Z0-9]+)/);
+            if (!hashMatch) return showVerifyResult('error', '❌ ไม่สามารถอ่านลิงก์ได้');
+            const voucherHash = hashMatch[1];
+
+            verifyBtn.innerText = '⏳ กำลังตรวจสอบ...';
+            verifyBtn.disabled = true;
+            payBtn.disabled = true;
+            document.getElementById('verifyResult').style.display = 'none';
+
+            try {
+                // 1️⃣ เช็คว่าลิงก์นี้ถูกใช้ในระบบแล้วหรือยัง
+                const dupQuery = query(collection(db, "orders"), where("walletLink", "==", link));
+                const dupSnap = await getDocs(dupQuery);
+                if (!dupSnap.empty) {
+                    showVerifyResult('error', '❌ ซองนี้ถูกใช้ในระบบแล้ว กรุณาใช้ซองใหม่!');
+                    verifyBtn.innerText = '🔍 ตรวจสอบซองเงิน';
+                    verifyBtn.disabled = false;
+                    return;
+                }
+
+                // 2️⃣ เช็คกับ TrueMoney API
+                const apiUrl = `https://gift.truemoney.com/campaign/vouchers/${voucherHash}/applicable-of-voucher?mobile=${phone}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+
+                const res = await fetch(proxyUrl);
+                const json = await res.json();
+                const data = JSON.parse(json.contents);
+
+                if (data.status && data.status.code === "SUCCESS") {
+                    const amount = parseFloat(data.data.voucher.amount_baht);
+                    const productPrice = currentBuyingItem.price;
+
+                    if (amount >= productPrice) {
+                        showVerifyResult('success',
+                            `✅ ยอดในซอง: <strong>${amount} ฿</strong> | ราคาสินค้า: <strong>${productPrice} ฿</strong><br>✅ ยอดครบถ้วน สามารถชำระได้!`
+                        );
+                        payBtn.disabled = false;
+                    } else {
+                        showVerifyResult('error',
+                            `❌ ยอดในซอง: <strong>${amount} ฿</strong> — ต้องการ <strong>${productPrice} ฿</strong><br>ยอดไม่เพียงพอ กรุณาใช้ซองใหม่!`
+                        );
+                    }
+                } else if (data.status?.code === "VOUCHER_NOT_FOUND") {
+                    showVerifyResult('error', '❌ ไม่พบซองเงินนี้ หรือถูกใช้ไปแล้ว กรุณาใช้ซองใหม่!');
+                } else if (data.status?.code === "VOUCHER_OUT_OF_DATE") {
+                    showVerifyResult('error', '❌ ซองหมดอายุแล้ว กรุณาใช้ซองใหม่!');
+                } else {
+                    showVerifyResult('error', `❌ เกิดข้อผิดพลาด: ${data.status?.message || 'ไม่ทราบสาเหตุ'}`);
+                }
+
+            } catch (err) {
+                showVerifyResult('error', '❌ ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง');
+                console.error(err);
+            } finally {
+                verifyBtn.innerText = '🔍 ตรวจสอบซองเงิน';
+                verifyBtn.disabled = false;
+            }
+        };
+
+        // ==================== PROCESS PAYMENT ====================
+        window.processPayment = async () => {
+            const link = document.getElementById('walletLink').value.trim();
+            const payBtn = document.getElementById('payBtn');
+            if (payBtn.disabled) return;
+
+            payBtn.innerText = '⏳ กำลังบันทึก...';
+            payBtn.disabled = true;
+            document.getElementById('verifyBtn').disabled = true;
+
+            try {
+                await addDoc(collection(db, "orders"), {
+                    userName: currentUser.name,
+                    productName: currentBuyingItem.name,
+                    price: currentBuyingItem.price,
+                    walletLink: link,
+                    timestamp: new Date().toISOString()
+                });
+                await updateDoc(doc(db, "products", currentBuyingItem.id), {
+                    stock: currentBuyingItem.stock - 1
+                });
+
+                document.getElementById('dlLink').href = currentBuyingItem.downloadLink;
+                document.getElementById('downloadBox').style.display = 'block';
+                document.getElementById('verifyResult').style.display = 'none';
+                payBtn.style.display = 'none';
+                document.getElementById('verifyBtn').style.display = 'none';
+
+            } catch (err) {
+                alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
+                payBtn.innerText = '✅ ชำระเงิน';
+                payBtn.disabled = false;
+                document.getElementById('verifyBtn').disabled = false;
+            }
+        };
+
     </script>
 </body>
 </html>
